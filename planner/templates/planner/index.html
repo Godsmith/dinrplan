@@ -6,7 +6,7 @@
     {% for day in days %}
       <tr>
         <td>{{ day.date.isoformat }}</td>
-        <td>{{ day.text }}</td>
+        <td><a href="{% url 'createmeal' %}">{{ day.text }}</a></td>
         <td>
           <a href="{% url 'showday' date_=day.date %}">Edit</a>
         </td>

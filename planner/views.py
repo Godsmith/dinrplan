@@ -2,8 +2,9 @@ from datetime import date, timedelta
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.generic import CreateView
 
-from .models import Day
+from .models import Day, Meal
 
 
 def index(request):
@@ -42,3 +43,19 @@ def editday(request, date_):
         day.save()
 
     return HttpResponseRedirect(reverse("index"))
+
+
+class MealCreateView(CreateView):
+    model = Meal
+    template_name = "planner/createmeal.html"
+    fields = ["name", "source", "persons", "time", "ingredients", "steps"]
+    success_url = "/"  # reverse("index")  # this does not work for some reason
+
+    # def get_initial(self):
+    #     initial = super().get_initial()
+    #     initial["name"] = self.kwargs["text"]
+    #     return initial
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
