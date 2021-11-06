@@ -5,6 +5,7 @@
   <title>{% block title %}dinrplan{% endblock %}</title>
 </head>
 <body>
+  <h1>dinrplan</h1>
   <nav>
     {% if user.is_authenticated %}
       Hi {{ user.username }}! <a href="{% url 'logout' %}">Log Out</a>

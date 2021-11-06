@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<p>
   <table>
-    {% for date in dates %}
+    {% for day in days %}
       <tr>
-        <td>{{ date }}</td>
-        <td>{{ text }}</td>
+        <td>{{ day.date.isoformat }}</td>
+        <td>{{ day.text }}</td>
         <td>
-          <a href="{% url 'editday' date=date %}">Edit</a>
+          <a href="{% url 'showday' date_=day.date %}">Edit</a>
         </td>
       </tr>
     {% endfor %}
   </table>
-  Main content
+</p>
 {% endblock %}

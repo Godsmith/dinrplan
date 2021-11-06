@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="{% url 'editday' date_=date %}" method="post">
+{% csrf_token %}
+<fieldset>
+    <input type="text" name="text" id="text" value="{{ text }}">
+</fieldset>
+<input type="submit" value="Ok">
+</form>
+<form action="{% url 'index' %}" method="get">
+    <input type="submit" value="Cancel">
+</form>
+{% endblock %}
