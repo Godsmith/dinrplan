@@ -1,5 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    Main content
+  <table>
+    {% for date in dates %}
+      <tr>
+        <td>{{ date }}</td>
+        <td>{{ text }}</td>
+        <td>
+          <a href="{% url 'editday' date=date %}">Edit</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+  Main content
 {% endblock %}
