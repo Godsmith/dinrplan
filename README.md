@@ -9,13 +9,17 @@
 
 ```
 poetry install
-poetry shell
-python manage.py migrate
+poetry run python manage.py migrate
 ```
 
 ## Running
 
 ```
-poetry shell
-python manage.py runserver
+poetry run python manage.py runserver
+```
+
+## Running tests
+
+```
+poetry run python manage.py test
 ```

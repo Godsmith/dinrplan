@@ -6,11 +6,15 @@ authors = ["Filip Lange <filip.lange@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-black = {extras = ["d"], version = "^21.10b0"}
 Django = "^3.2.9"
 
 [tool.poetry.dev-dependencies]
+black = {extras = ["d"], version = "^21.10b0"}
+pyreadline3 = "^3.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+test = "python manage.py test"
