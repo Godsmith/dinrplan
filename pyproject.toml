@@ -5,8 +5,9 @@ description = ""
 authors = ["Filip Lange <filip.lange@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "3.9.1"
 Django = "^3.2.9"
+django-heroku = "^0.3.1"
 
 [tool.poetry.dev-dependencies]
 black = {extras = ["d"], version = "^21.10b0"}

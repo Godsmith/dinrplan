@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-)tbxfj1euplqc#=kw6yi-jy#h%#t1za*aoj@ozsem((4c)7ztv"
+#SECRET_KEY = "django-insecure-)tbxfj1euplqc#=kw6yi-jy#h%#t1za*aoj@ozsem((4c)7ztv"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -134,3 +134,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # The URL to which the user is redirected after login
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+
+# Configure Django App for Heroku.
+import django_heroku
+django_heroku.settings(locals())
