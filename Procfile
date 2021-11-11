@@ -1,1 +1,1 @@
-web: daphne dinrplan.asgi:application
+web: daphne -p $PORT dinrplan.asgi:application
