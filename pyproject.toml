@@ -5,7 +5,7 @@ description = ""
 authors = ["Filip Lange <filip.lange@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "3.9.1"
+python = "^3.9"
 Django = "^3.2.9"
 django-heroku = "^0.3.1"
 daphne = "^3.0.2"
