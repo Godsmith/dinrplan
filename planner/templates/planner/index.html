@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>
-  <table class="table table-bordered">
-    {% for day in days %}
-      <tr>
-        <td>{{ day.date.isoformat }}</td>
-        <td><a href="{% url 'createmeal' %}">{{ day.text }}</a></td>
-        <td>
-          <a class="btn btn-light" href="{% url 'showday' date_=day.date %}"><i class="bi bi-pencil"></i></a>
-        </td>
-      </tr>
-    {% endfor %}
-  </table>
-</p>
+{% for week in weeks %}
+  <p>
+    <table class="table table-bordered">
+      {% for day in week %}
+        <tr>
+          <td>{{day.weekday_name}}<br>{{ day.date.isoformat }}</td>
+          <td><a href="{% url 'createmeal' %}">{{ day.text }}</a></td>
+          <td>
+            <a class="btn btn-light" href="{% url 'showday' date_=day.date %}"><i class="bi bi-pencil"></i></a>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  </p>
+{% endfor %}
 {% endblock %}

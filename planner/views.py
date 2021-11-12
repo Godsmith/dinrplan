@@ -8,19 +8,24 @@ from .models import Day, Meal
 
 
 def index(request):
+    week_deltas = [-1, 0]
+    monday_current_week = date.today() - timedelta(days=date.today().weekday())
+    weeks = []
     if request.user.is_authenticated:
-        dates = [(date.today() + timedelta(days=i)) for i in range(7)]
-        days = []
-        for date_ in dates:
-            try:
-                day = Day.objects.get(date=date_)
-            except Day.DoesNotExist:
-                day = Day(date=date_, text="", user=request.user)
-            days.append(day)
-    else:
-        days = []
+        for week_delta in week_deltas:
+            monday = monday_current_week + timedelta(days=week_delta * 7)
+            dates = [(monday + timedelta(days=i)) for i in range(7)]
+            days = []
+            for date_ in dates:
+                date_.isoweekday()
+                try:
+                    day = Day.objects.get(date=date_)
+                except Day.DoesNotExist:
+                    day = Day(date=date_, text="", user=request.user)
+                days.append(day)
+            weeks.append(days)
 
-    return render(request, "planner/index.html", {"days": days})
+    return render(request, "planner/index.html", {"weeks": weeks})
 
 
 def showday(request, date_: str):
