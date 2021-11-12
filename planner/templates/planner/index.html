@@ -2,13 +2,13 @@
 
 {% block content %}
 <p>
-  <table>
+  <table class="table table-bordered">
     {% for day in days %}
       <tr>
         <td>{{ day.date.isoformat }}</td>
         <td><a href="{% url 'createmeal' %}">{{ day.text }}</a></td>
         <td>
-          <a href="{% url 'showday' date_=day.date %}">Edit</a>
+          <a class="btn btn-light" href="{% url 'showday' date_=day.date %}"><i class="bi bi-pencil"></i></a>
         </td>
       </tr>
     {% endfor %}
