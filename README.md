@@ -6,22 +6,35 @@
 - PostgreSQL
 - poetry
 
-## Installing
+## Setting up the development environment
 
-Create a PostgreSQL database
+### Create a PostgreSQL database
+
+### Create a .env file
 
 ```commandline
 cp .env.example .env
 ```
 
-Set the environment variables in .env
+### Install dependencies
 
 ```
 poetry install
+```
+
+### Install pre-commit
+
+```
+pre-commit install
+```
+
+### Migrate database
+
+```
 poetry run python manage.py migrate
 ```
 
-## Running
+## Running development server
 
 ```
 poetry run python manage.py runserver
@@ -36,5 +49,7 @@ poetry run python manage.py test
 ## Deploying
 
 ```commandline
-git push heroku master
+git push
 ```
+
+Heroku is set to deploy when the Github Actions pass.

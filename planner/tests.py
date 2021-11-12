@@ -30,5 +30,5 @@ class MainViewTests(TestCase):
         self.client.login(username="user1", password="user1")
 
         response = self.client.get("/")
-        
+
         self.assertInHTML("My recipe", str(response.content))
