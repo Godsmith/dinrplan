@@ -36,4 +36,10 @@ jobs:
     - name: Run migrations
       run: poetry run python manage.py migrate
     - name: Run tests
-      run: poetry run python manage.py test
+      run: poetry run coverage run --source="." manage.py test
+    - name: Produce coverage.xml
+      run: coverage xml
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v2
+      with:
+        fail_ci_if_error: true
