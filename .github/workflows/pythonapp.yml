@@ -4,9 +4,9 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    env:
+      SECRET_KEY: mysecretkey
     services:
       postgres:
         image: postgres:14.1
