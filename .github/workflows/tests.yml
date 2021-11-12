@@ -38,7 +38,7 @@ jobs:
     - name: Run tests
       run: poetry run coverage run --source="." manage.py test
     - name: Produce coverage.xml
-      run: coverage xml
+      run: poetry run coverage xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
