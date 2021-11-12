@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
+import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -19,18 +20,16 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = "django-insecure-)tbxfj1euplqc#=kw6yi-jy#h%#t1za*aoj@ozsem((4c)7ztv"
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    "0.0.0.0",
+    ".localhost",
+    "127.0.0.1",
+    "[::1]",
+    "dinrplan.herokuapp.com",
+]
 
 # Application definition
 
@@ -76,21 +75,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "dinrplan.wsgi.application"
 
-
 # Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dinrplan',
-        'USER': os.environ["DB_USER"],
-        'PASSWORD': os.environ["DB_PASSWORD"],
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
-
+DATABASES = (
+    {}
+)  # This is created by django_heroku from the DATABASE_URL environment variable
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -128,11 +117,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "/static/"
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -145,4 +135,10 @@ LOGOUT_REDIRECT_URL = "/"
 
 # Configure Django App for Heroku.
 import django_heroku
+
 django_heroku.settings(locals())
+
+# django_heroku always adds SSL mode to the database, but we don't use that locally, so remove that again
+# https://github.com/heroku/heroku-buildpack-pgbouncer/issues/118
+if os.environ.get("ENV") == "development":
+    del DATABASES["default"]["OPTIONS"]["sslmode"]
