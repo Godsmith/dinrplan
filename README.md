@@ -3,6 +3,7 @@
 ## Prerequisites
 
 - Python 3.9+
+- PostgreSQL
 - poetry
 
 ## Installing
