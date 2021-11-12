@@ -8,6 +8,7 @@ jobs:
     env:
       SECRET_KEY: mysecretkey
       DATABASE_URL: postgres://postgres:postgres@127.0.0.1/github_actions
+      ENV: development
     services:
       postgres:
         image: postgres:14.1
