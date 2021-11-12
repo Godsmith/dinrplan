@@ -76,19 +76,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "dinrplan.wsgi.application"
 
 # Database
-# These values are for Github Actions.
-# They are overridden by django_heroku from the DATABASE_URL environment variable
-# if such a variable exists.
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "github_actions",
-        "USER": "postgres",
-        "PASSWORD": "postgres",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
-    }
-}
+# This is overridden by django_heroku and taken from the DATABASE_URL environment variable instead.
+DATABASES = {}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
