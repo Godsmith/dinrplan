@@ -8,14 +8,13 @@
 
 ## Installing
 
-1. Create a PostgreSQL database
-2. Set these environmental variables:
+Create a PostgreSQL database
 
+```commandline
+cp .env.example .env
 ```
-SECRET_KEY
-DB_USER
-DB_PASSWORD
-```
+
+Set the environment variables in .env
 
 ```
 poetry install
