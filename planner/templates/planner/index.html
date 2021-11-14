@@ -9,7 +9,7 @@
           <td>{{day.weekday_name}}<br>{{ day.date.isoformat }}</td>
           <td>
             {% for meal in day.meals.all %}
-              <a href="{% url 'createmeal' meal_name=meal.name %}">{{ meal.name }}</a>
+              <a href="{% url 'updatemeal' pk=meal.pk %}">{{ meal.name }}</a>
             {% endfor %}
           </td>
           <td>

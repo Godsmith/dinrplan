@@ -2,7 +2,7 @@ from datetime import date, timedelta
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 
 from .models import Day, Meal
 
@@ -46,17 +46,11 @@ def editday(request, date_):
     return HttpResponseRedirect(reverse("index"))
 
 
-class MealCreateView(CreateView):
+class MealUpdateView(UpdateView):
     model = Meal
-    template_name = "planner/createmeal.html"
+    template_name = "planner/updatemeal.html"
     fields = ["name", "source", "persons", "time", "ingredients", "steps"]
     success_url = "/"  # reverse("index")  # this does not work for some reason
-
-    def get_initial(self):
-        """Prepoulate the name field with the meal name from the URL, e.g. createmeal/Pannkakor"""
-        initial = super().get_initial()
-        initial["name"] = self.kwargs["meal_name"]
-        return initial
 
     def form_valid(self, form):
         """Add author to the created Meal object, since it is a mandatory field"""
