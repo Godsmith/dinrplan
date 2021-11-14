@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ object.name }}</h2>
+<a class="btn btn-light" href="{% url 'updatemeal' pk=object.id %}"><i class="bi bi-pencil"></i></a>
+<p>Ingredients {{ object.ingredients }}</p>
+<p>Steps: {{ object.steps }}</p>
+<p>Persons: {{ object.persons }}</p>
+{% endblock %}

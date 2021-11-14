@@ -12,6 +12,11 @@ class Meal(models.Model):
     ingredients = models.CharField(max_length=1000, blank=True)
     steps = models.CharField(max_length=10000, blank=True)
 
+    @property
+    def is_created(self) -> bool:
+        """A meal is considered created when it has ingredients"""
+        return bool(self.ingredients)
+
 
 class Day(models.Model):
     MEAL_NAME_DELIMITER = ";"

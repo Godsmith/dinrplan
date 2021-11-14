@@ -2,7 +2,7 @@ from datetime import date, timedelta
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import UpdateView, DetailView
 
 from .models import Day, Meal
 
@@ -56,3 +56,9 @@ class MealUpdateView(UpdateView):
         """Add author to the created Meal object, since it is a mandatory field"""
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+
+class MealDetailView(DetailView):
+    model = Meal
+    template_name = "planner/meal_detail.html"
+    fields = ["name", "source", "persons", "time", "ingredients", "steps"]
