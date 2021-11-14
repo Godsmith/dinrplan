@@ -19,7 +19,9 @@ class MealModelTests(TestCase):
 class MainViewTests(TestCase):
     def setUp(self):
         user1 = User.objects.create_user(username="user1", password="user1")
-        Day.objects.create(date=timezone.now().date(), text="My recipe", user=user1)
+        meal = Meal.objects.create(name="My recipe", author=user1)
+        day = Day.objects.create(date=timezone.now().date(), user=user1)
+        day.meals.add(meal)
 
     def test_todays_recipe_is_not_shown_on_main_page_if_not_logged_in(self):
         response = self.client.get("/")

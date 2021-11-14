@@ -18,10 +18,7 @@ def index(request):
             days = []
             for date_ in dates:
                 date_.isoweekday()
-                try:
-                    day = Day.objects.get(date=date_)
-                except Day.DoesNotExist:
-                    day = Day(date=date_, text="", user=request.user)
+                day, _ = Day.objects.get_or_create(date=date_, user=request.user)
                 days.append(day)
             weeks.append(days)
 
@@ -29,23 +26,22 @@ def index(request):
 
 
 def showday(request, date_: str):
-    try:
-        day = Day.objects.get(date=date.fromisoformat(date_))
-        text = day.text
-    except Day.DoesNotExist:
-        text = ""
-    return render(request, "planner/day.html", {"date": date_, "text": text})
+    day, _ = Day.objects.get_or_create(date=date.fromisoformat(date_))
+    return render(request, "planner/day.html", {"day": day})
 
 
 def editday(request, date_):
     text = request.POST["text"]
-    try:
-        day = Day.objects.get(date=date.fromisoformat(date_))
-        day.text = text
-        day.save()
-    except Day.DoesNotExist:
-        day = Day(date=date.fromisoformat(date_), text=text, user=request.user)
-        day.save()
+    meals = []
+    for meal_name in text.split(Day.MEAL_NAME_DELIMITER):
+        meal_name = meal_name.strip()
+        # Raises MultipleObjectsReturned if the user has managed to create multiple meals in some way
+        meal, _ = Meal.objects.get_or_create(author=request.user, name=meal_name)
+        meals.append(meal)
+    day, _ = Day.objects.get_or_create(
+        date=date.fromisoformat(date_), user=request.user
+    )
+    day.meals.set(meals)
 
     return HttpResponseRedirect(reverse("index"))
 
