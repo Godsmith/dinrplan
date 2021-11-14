@@ -7,5 +7,5 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("day/<date_>", views.showday, name="showday"),
     path("editday/<date_>", views.editday, name="editday"),
-    path("createmeal/", views.MealCreateView.as_view(), name="createmeal"),
+    path("createmeal/<meal_name>", views.MealCreateView.as_view(), name="createmeal"),
 ]

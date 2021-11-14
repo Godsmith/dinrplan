@@ -52,11 +52,13 @@ class MealCreateView(CreateView):
     fields = ["name", "source", "persons", "time", "ingredients", "steps"]
     success_url = "/"  # reverse("index")  # this does not work for some reason
 
-    # def get_initial(self):
-    #     initial = super().get_initial()
-    #     initial["name"] = self.kwargs["text"]
-    #     return initial
+    def get_initial(self):
+        """Prepoulate the name field with the meal name from the URL, e.g. createmeal/Pannkakor"""
+        initial = super().get_initial()
+        initial["name"] = self.kwargs["meal_name"]
+        return initial
 
     def form_valid(self, form):
+        """Add author to the created Meal object, since it is a mandatory field"""
         form.instance.author = self.request.user
         return super().form_valid(form)
