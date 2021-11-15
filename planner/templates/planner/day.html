@@ -4,7 +4,7 @@
 <form action="{% url 'editday' date_=day.date %}" method="post">
 {% csrf_token %}
 <fieldset>
-    <input type="text" name="text" id="text" value="{{ text }}">
+    <input type="text" name="text" id="text" value="{{ day.text }}">
 </fieldset>
 <input type="submit" value="Ok">
 </form>
