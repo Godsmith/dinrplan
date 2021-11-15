@@ -1,7 +1,9 @@
 from datetime import date, timedelta
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.views import View
 from django.views.generic import UpdateView, DetailView
 
 from .models import Day, Meal
@@ -25,27 +27,6 @@ def index(request):
     return render(request, "planner/index.html", {"weeks": weeks})
 
 
-def showday(request, date_: str):
-    day, _ = Day.objects.get_or_create(date=date.fromisoformat(date_))
-    return render(request, "planner/day.html", {"day": day})
-
-
-def editday(request, date_):
-    text = request.POST["text"]
-    meals = []
-    for meal_name in text.split(Day.MEAL_NAME_DELIMITER):
-        meal_name = meal_name.strip()
-        # Raises MultipleObjectsReturned if the user has managed to create multiple meals in some way
-        meal, _ = Meal.objects.get_or_create(author=request.user, name=meal_name)
-        meals.append(meal)
-    day, _ = Day.objects.get_or_create(
-        date=date.fromisoformat(date_), user=request.user
-    )
-    day.meals.set(meals)
-
-    return HttpResponseRedirect(reverse("index"))
-
-
 class MealUpdateView(UpdateView):
     model = Meal
     template_name = "planner/updatemeal.html"
@@ -62,3 +43,24 @@ class MealDetailView(DetailView):
     model = Meal
     template_name = "planner/meal_detail.html"
     fields = ["name", "source", "persons", "time", "ingredients", "steps"]
+
+
+class DayView(View):
+    def get(self, request, *args, **kwargs):
+        day, _ = Day.objects.get_or_create(date=date.fromisoformat(kwargs["date"]))
+        return render(request, "planner/day.html", {"day": day})
+
+    def post(self, request, *args, **kwargs):
+        text = request.POST["text"]
+        meals = []
+        for meal_name in text.split(Day.MEAL_NAME_DELIMITER):
+            meal_name = meal_name.strip()
+            # Raises MultipleObjectsReturned if the user has managed to create multiple meals in some way
+            meal, _ = Meal.objects.get_or_create(author=request.user, name=meal_name)
+            meals.append(meal)
+        day, _ = Day.objects.get_or_create(
+            date=date.fromisoformat(kwargs["date"]), user=request.user
+        )
+        day.meals.set(meals)
+
+        return HttpResponseRedirect(reverse("index"))
