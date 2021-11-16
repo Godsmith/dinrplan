@@ -10,7 +10,7 @@ from .models import Day, Meal
 
 
 def index(request):
-    week_deltas = [-1, 0]
+    week_deltas = [-3, -2, -1, 0]
     monday_current_week = date.today() - timedelta(days=date.today().weekday())
     weeks = []
     if request.user.is_authenticated:
