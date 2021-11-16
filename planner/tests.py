@@ -47,7 +47,7 @@ class DayViewTests(TestCase):
         self.client.login(username="user1", password="user1")
 
         self.client.post(
-            reverse("day", kwargs={"date": timezone.now().date()}),
+            reverse("planner:day", kwargs={"date": timezone.now().date()}),
             data={"text": "My recipe"},
         )
 
@@ -58,7 +58,7 @@ class DayViewTests(TestCase):
         self.day.meals.add(self.meal)
 
         response = self.client.get(
-            reverse("day", kwargs={"date": timezone.now().date()})
+            reverse("planner:day", kwargs={"date": timezone.now().date()})
         )
 
         self.assertIn("My recipe", str(response.content))

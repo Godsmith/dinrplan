@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
-{% load static %}
 
 {% block head %}
+  {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'planner/index.css' %}">
 {% endblock %}
 
@@ -19,14 +19,14 @@
                   <td>
                     {% for meal in day.meals.all %}
                       {% if meal.is_created %}
-                        <a class="exists" href="{% url 'showmeal' pk=meal.pk %}">{{ meal.name }}</a>
+                        <a class="exists" href="{% url 'planner:showmeal' pk=meal.pk %}">{{ meal.name }}</a>
                       {% else %}
-                        <a class="does-not-exist" href="{% url 'updatemeal' pk=meal.pk %}">{{ meal.name }}</a>
+                        <a class="does-not-exist" href="{% url 'planner:updatemeal' pk=meal.pk %}">{{ meal.name }}</a>
                       {% endif %}
                     {% endfor %}
                   </td>
                   <td class="align-middle" style="width:1%" >
-                    <a class="btn btn-light" href="{% url 'day' date=day.date %}"><i class="bi bi-pencil"></i></a>
+                    <a class="btn btn-light" href="{% url 'planner:day' date=day.date %}"><i class="bi bi-pencil"></i></a>
                   </td>
                 </tr>
               {% endfor %}

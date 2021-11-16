@@ -63,4 +63,4 @@ class DayView(View):
         )
         day.meals.set(meals)
 
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("planner:index"))

@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form action="{% url 'day' date=day.date %}" method="post">
+<form action="{% url 'planner:day' date=day.date %}" method="post">
 {% csrf_token %}
 <fieldset>
     <input type="text" name="text" id="text" value="{{ day.text }}">
 </fieldset>
 <input type="submit" value="Ok">
 </form>
-<form action="{% url 'index' %}" method="get">
+<form action="{% url 'planner:index' %}" method="get">
     <input type="submit" value="Cancel">
 </form>
 {% endblock %}
