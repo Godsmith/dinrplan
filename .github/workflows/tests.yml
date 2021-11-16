@@ -35,6 +35,8 @@ jobs:
         poetry install
     - name: Run migrations
       run: poetry run python manage.py migrate
+    - name: Collect static files
+      run: poetry run python manage.py collectstatic
     - name: Run tests
       run: poetry run coverage run --source="." manage.py test
     - name: Produce coverage.xml
