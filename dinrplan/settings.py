@@ -20,7 +20,7 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ["ENV"] == "development"
+DEBUG = os.environ.get("ENV") == "development"
 
 ALLOWED_HOSTS = [
     "0.0.0.0",
