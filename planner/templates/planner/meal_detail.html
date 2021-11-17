@@ -1,7 +1,6 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<h2>{{ object.name }}
+{% extends 'base.html' %} {% block content %}
+<h2>
+  {{ object.name }}
   <a class="btn btn-light" href="{% url 'planner:updatemeal' pk=object.id %}">
     <i class="bi bi-pencil"></i>
   </a>
@@ -29,13 +28,18 @@
       <td>{{ object.steps|linebreaks }}</td>
     </tr>
     <tr>
-      <th scope="row">Comments<br><a class="btn btn-light" href="{% url 'planner:createcomment' pk=object.id %}">
-    <i class="bi bi-chat-left-text"></i>
-  </a></th>
+      <th scope="row">
+        Comments<br /><a
+          class="btn btn-light"
+          href="{% url 'planner:createcomment' pk=object.id %}"
+        >
+          <i class="bi bi-chat-left-text"></i>
+        </a>
+      </th>
       <td>
         {% for comment in object.comment_set.all %}
-          <div>{{ comment.author }} {{ comment.created_at }}</div>
-          <div>{{ comment.text|linebreaks }}</div>
+        <div>{{ comment.author }} {{ comment.created_at }}</div>
+        <div>{{ comment.text|linebreaks }}</div>
         {% endfor %}
       </td>
     </tr>

@@ -1,26 +1,26 @@
 $(document).ready(function () {
-  let selectizeControl = $('#myselect');
-  console.log(selectizeControl)
+  let selectizeControl = $("#myselect");
+  console.log(selectizeControl);
   var $select = selectizeControl.selectize({
     //    valueField: 'name',
     //    labelField: 'name',
     //    searchField: 'name',
     persist: false,
-    delimiter: ';',
+    delimiter: ";",
     //    openOnFocus: false,
     //    create: (input => {return {name: input}}),
     create: true,
     createOnBlur: true,
-    onDropdownOpen: function() {
+    onDropdownOpen: function () {
       // Manually prevent dropdown from opening when there is no search term
       if (!this.lastQuery.length) {
         this.close();
       }
     },
-    onItemAdd: function() {
+    onItemAdd: function () {
       // Close dropdown when choosing a meal
       this.close();
-    }
+    },
   });
 
   // Store the reference to the selectize in the data property to be able to access it elsewhere
