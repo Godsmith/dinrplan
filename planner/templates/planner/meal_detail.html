@@ -1,29 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>{{ object.name }}</h2>
-<a class="btn btn-light" href="{% url 'planner:updatemeal' pk=object.id %}"><i class="bi bi-pencil"></i></a>
+<h2>{{ object.name }}
+  <a class="btn btn-light" href="{% url 'planner:updatemeal' pk=object.id %}">
+    <i class="bi bi-pencil"></i>
+  </a>
+</h2>
 <table class="table">
   <tbody>
     <tr>
-      <th scope="row" width="1%">Source:</th>
+      <th scope="row" width="1%">Source</th>
       <td>{{ object.source }}</td>
     </tr>
     <tr>
-      <th scope="row">Persons:</th>
+      <th scope="row">Persons</th>
       <td>{{ object.persons }}</td>
     </tr>
     <tr>
-      <th scope="row">Time:</th>
+      <th scope="row">Time</th>
       <td>{{ object.time }}</td>
     </tr>
     <tr>
-      <th scope="row">Ingredients:</th>
-      <td>{{ object.ingredient }}</td>
+      <th scope="row">Ingredients</th>
+      <td>{{ object.ingredients|linebreaks }}</td>
     </tr>
     <tr>
-      <th scope="row">Steps:</th>
-      <td>{{ object.steps }}</td>
+      <th scope="row">Steps</th>
+      <td>{{ object.steps|linebreaks }}</td>
     </tr>
   </tbody>
 </table>

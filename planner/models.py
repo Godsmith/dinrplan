@@ -9,13 +9,18 @@ class Meal(models.Model):
     source = models.CharField(max_length=200, blank=True)
     persons = models.IntegerField(default=4)
     time = models.CharField(max_length=200, blank=True)
-    ingredients = models.CharField(max_length=1000, blank=True)
-    steps = models.CharField(max_length=10000, blank=True)
+    ingredients = models.TextField(max_length=1000, blank=True)
+    steps = models.TextField(max_length=10000, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     @property
     def is_created(self) -> bool:
         """A meal is considered created when it has ingredients"""
         return bool(self.ingredients)
+
+    def __str__(self):
+        return self.name
 
 
 class Day(models.Model):
