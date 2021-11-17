@@ -2,8 +2,29 @@
 
 {% block content %}
 <h2>{{ object.name }}</h2>
-<a class="btn btn-light" href="{% url 'updatemeal' pk=object.id %}"><i class="bi bi-pencil"></i></a>
-<p>Ingredients {{ object.ingredients }}</p>
-<p>Steps: {{ object.steps }}</p>
-<p>Persons: {{ object.persons }}</p>
+<a class="btn btn-light" href="{% url 'planner:updatemeal' pk=object.id %}"><i class="bi bi-pencil"></i></a>
+<table class="table">
+  <tbody>
+    <tr>
+      <th scope="row" width="1%">Source:</th>
+      <td>{{ object.source }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Persons:</th>
+      <td>{{ object.persons }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Time:</th>
+      <td>{{ object.time }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Ingredients:</th>
+      <td>{{ object.ingredient }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Steps:</th>
+      <td>{{ object.steps }}</td>
+    </tr>
+  </tbody>
+</table>
 {% endblock %}

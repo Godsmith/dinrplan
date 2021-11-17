@@ -62,3 +62,34 @@ class DayViewTests(TestCase):
         )
 
         self.assertIn("My recipe", str(response.content))
+
+
+class ShowMealTests(TestCase):
+    def setUp(self):
+        user1 = User.objects.create_user(username="user1", password="user1")
+        self.meal = Meal.objects.create(
+            name="My recipe",
+            author=user1,
+            source="mysource",
+            persons=8,
+            time="30 min",
+            ingredients="myingredients",
+            steps="mysteps",
+        )
+        self.day = Day.objects.create(date=timezone.now().date(), user=user1)
+        self.client.login(username="user1", password="user1")
+
+    def test_shows_properties(self):
+        response = self.client.get(
+            reverse("planner:showmeal", kwargs={"pk": self.meal.pk})
+        )
+        for text in [
+            "My recipe",
+            "mysource",
+            "8",
+            "30 min",
+            "myingredients",
+            "mysteps",
+        ]:
+            with self.subTest():
+                self.assertIn(text, str(response.content))
