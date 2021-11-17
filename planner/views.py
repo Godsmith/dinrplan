@@ -2,12 +2,12 @@ from datetime import date, timedelta
 from typing import List
 
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import View
-from django.views.generic import UpdateView, DetailView
+from django.views.generic import UpdateView, DetailView, CreateView
 
-from .models import Day, Meal
+from .models import Day, Meal, Comment
 
 
 def index(request):
@@ -32,7 +32,9 @@ class MealUpdateView(UpdateView):
     model = Meal
     template_name = "planner/updatemeal.html"
     fields = ["name", "source", "persons", "time", "ingredients", "steps"]
-    success_url = "/"  # reverse("index")  # this does not work for some reason
+    success_url = (
+        "/"  # reverse("index")  # this does not work; must be in get_success_url
+    )
 
     def form_valid(self, form):
         """Add author to the created Meal object, since it is a mandatory field"""
@@ -78,3 +80,22 @@ class DayView(View):
         day.meals.set(meals)
 
         return HttpResponseRedirect(reverse("planner:index"))
+
+
+class CommentCreateView(CreateView):
+    model = Comment
+    template_name = "planner/createcomment.html"
+    fields = ["text"]
+
+    def get_success_url(self):
+        return reverse("planner:showmeal", kwargs={"pk": self.kwargs["pk"]})
+
+    def form_valid(self, form):
+        """Add author to the created Meal object, since it is a mandatory field"""
+        form.instance.author = self.request.user
+
+        meal_pk = self.kwargs["pk"]
+        meal = get_object_or_404(Meal, pk=meal_pk)
+        form.instance.meal = meal
+
+        return super().form_valid(form)

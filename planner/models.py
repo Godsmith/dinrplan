@@ -38,3 +38,11 @@ class Day(models.Model):
 
     def text(self) -> str:
         return self.MEAL_NAME_DELIMITER.join(meal.name for meal in self.meals.all())
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    meal = models.ForeignKey(Meal, on_delete=models.CASCADE)
+    text = models.TextField(max_length=200, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

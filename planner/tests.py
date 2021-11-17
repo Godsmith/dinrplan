@@ -79,7 +79,7 @@ class ShowMealTests(TestCase):
         self.day = Day.objects.create(date=timezone.now().date(), user=user1)
         self.client.login(username="user1", password="user1")
 
-    def test_shows_properties(self):
+    def test_shows_all_properties(self):
         response = self.client.get(
             reverse("planner:showmeal", kwargs={"pk": self.meal.pk})
         )
@@ -91,5 +91,17 @@ class ShowMealTests(TestCase):
             "myingredients",
             "mysteps",
         ]:
+            with self.subTest():
+                self.assertIn(text, str(response.content))
+
+    def test_posting_comment_shows_that_comment(self):
+        self.client.post(
+            reverse("planner:createcomment", kwargs={"pk": self.meal.pk}),
+            data={"text": "My comment text"},
+        )
+        response = self.client.get(
+            reverse("planner:showmeal", kwargs={"pk": self.meal.pk})
+        )
+        for text in ["user1", "My comment text"]:
             with self.subTest():
                 self.assertIn(text, str(response.content))
