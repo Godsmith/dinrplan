@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from typing import List
 
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -48,13 +49,26 @@ class MealDetailView(DetailView):
 class DayView(View):
     def get(self, request, *args, **kwargs):
         day, _ = Day.objects.get_or_create(date=date.fromisoformat(kwargs["date"]))
-        return render(request, "planner/day.html", {"day": day})
+        todays_meal_names = [meal.name for meal in day.meals.all()]
+        database_meal_names = [
+            meal.name
+            for meal in Meal.objects.filter(author=request.user)
+            if meal.is_created
+        ]
+        return render(
+            request,
+            "planner/day.html",
+            {
+                "day": day,
+                "todays_meal_names": todays_meal_names,
+                "database_meal_names": database_meal_names,
+            },
+        )
 
     def post(self, request, *args, **kwargs):
-        text = request.POST["text"]
+        meal_names = request.POST.getlist("select")  # type: List[str]
         meals = []
-        for meal_name in text.split(Day.MEAL_NAME_DELIMITER):
-            meal_name = meal_name.strip()
+        for meal_name in meal_names:
             # Raises MultipleObjectsReturned if the user has managed to create multiple meals in some way
             meal, _ = Meal.objects.get_or_create(author=request.user, name=meal_name)
             meals.append(meal)

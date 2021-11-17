@@ -48,7 +48,7 @@ class DayViewTests(TestCase):
 
         self.client.post(
             reverse("planner:day", kwargs={"date": timezone.now().date()}),
-            data={"text": "My recipe"},
+            data={"select": ["My recipe"]},
         )
 
         self.assertEqual(list(self.day.meals.all()), [self.meal])
