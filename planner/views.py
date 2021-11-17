@@ -50,7 +50,9 @@ class MealDetailView(DetailView):
 
 class DayView(View):
     def get(self, request, *args, **kwargs):
-        day, _ = Day.objects.get_or_create(date=date.fromisoformat(kwargs["date"]))
+        day, _ = Day.objects.get_or_create(
+            date=date.fromisoformat(kwargs["date"]), user=request.user
+        )
         todays_meal_names = [meal.name for meal in day.meals.all()]
         database_meal_names = [
             meal.name
