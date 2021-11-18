@@ -7,6 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import View
 from django.views.generic import UpdateView, DetailView, CreateView, FormView
+from django.utils.dateparse import parse_date
 
 from .forms import UploadFileForm
 from .models import Day, Meal, Comment, Category
@@ -112,7 +113,11 @@ class UploadJsonView(FormView):
     success_url = "/"
 
     def form_valid(self, form):
-        meals_file = self.request.FILES["meals"]
+        self._upload_meals(self.request.FILES["meals"])
+        self._upload_days(self.request.FILES["days"])
+        return super().form_valid(form)
+
+    def _upload_meals(self, meals_file):
         bytes = meals_file.read()
         text = bytes.decode("utf-8")
         meal_dicts = json.loads(text)
@@ -137,7 +142,6 @@ class UploadJsonView(FormView):
             if Meal.objects.filter(name=name).exists():
                 Meal.objects.get(name=name).delete()
 
-            print(name)
             meal = Meal.objects.create(
                 author=self.request.user,
                 name=name,
@@ -157,4 +161,24 @@ class UploadJsonView(FormView):
                     author=self.request.user, meal=meal, text=comment_text
                 )
 
-        return super().form_valid(form)
+    def _upload_days(self, days_file):
+        bytes = days_file.read()
+        text = bytes.decode("utf-8")
+        day_dicts = json.loads(text)
+        for day_dict in day_dicts:
+            try:
+                date_ = parse_date(day_dict["date"])
+            except TypeError:
+                continue
+            if not date_:
+                continue
+            day, _ = Day.objects.get_or_create(date=date_, user=self.request.user)
+            day.meals.clear()
+            meal_names_string = day_dict["meal"]
+            if meal_names_string:
+                meal_names = meal_names_string.split(";")
+                for meal_name in meal_names:
+                    meal, _ = Meal.objects.get_or_create(
+                        name=meal_name, author=self.request.user
+                    )
+                    day.meals.add(meal)
