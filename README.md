@@ -59,3 +59,10 @@ git push
 ```
 
 Heroku is set to deploy when the Github Actions pass.
+
+## Miscellanous
+
+### Starting a shell on heroku
+
+```commandline
+heroku run bash
