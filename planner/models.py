@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.formats import date_format
 
@@ -14,11 +15,15 @@ class Meal(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     source = models.CharField(max_length=200, blank=True)
-    persons = models.IntegerField(default=4)
+    persons = models.PositiveSmallIntegerField(
+        default=4, validators=[MinValueValidator(1)]
+    )
     time = models.CharField(max_length=200, blank=True)
     ingredients = models.TextField(max_length=1000, blank=True)
     steps = models.TextField(max_length=10000, blank=True)
-    rating = models.IntegerField(default=0)
+    rating = models.PositiveSmallIntegerField(
+        default=0, validators=[MaxValueValidator(5)]
+    )
     categories = models.ManyToManyField(Category)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
