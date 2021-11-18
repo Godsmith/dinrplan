@@ -1,3 +1,4 @@
+import json
 from datetime import date, timedelta
 from typing import List
 
@@ -5,9 +6,10 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import View
-from django.views.generic import UpdateView, DetailView, CreateView
+from django.views.generic import UpdateView, DetailView, CreateView, FormView
 
-from .models import Day, Meal, Comment
+from .forms import UploadFileForm
+from .models import Day, Meal, Comment, Category
 
 
 def index(request):
@@ -99,5 +101,60 @@ class CommentCreateView(CreateView):
         meal_pk = self.kwargs["pk"]
         meal = get_object_or_404(Meal, pk=meal_pk)
         form.instance.meal = meal
+
+        return super().form_valid(form)
+
+
+class UploadJsonView(FormView):
+    template_name = "planner/upload_json.html"
+    form_class = UploadFileForm
+    # fields = ["meals", "days"]
+    success_url = "/"
+
+    def form_valid(self, form):
+        meals_file = self.request.FILES["meals"]
+        bytes = meals_file.read()
+        text = bytes.decode("utf-8")
+        meal_dicts = json.loads(text)
+
+        for meal_dict in meal_dicts:
+            name = meal_dict["name"]
+            source = meal_dict["source"]
+            persons = meal_dict.get("servings", "") or "4"
+            rating = meal_dict.get("rating", "") or "0"
+            time = meal_dict["time"]
+            ingredients = meal_dict["ingredients"]
+            steps = meal_dict["steps"]
+            category_names = meal_dict.get("categories", "").split()
+            categories = []
+            if category_names and category_names[0]:
+                for category_name in category_names:
+                    category, _ = Category.objects.get_or_create(name=category_name)
+                    categories.append(category)
+            comment_texts = meal_dict.get("comments", [])
+
+            # Overwrite if there is an existing meal with the name
+            if Meal.objects.filter(name=name).exists():
+                Meal.objects.get(name=name).delete()
+
+            print(name)
+            meal = Meal.objects.create(
+                author=self.request.user,
+                name=name,
+                source=source,
+                persons=persons,
+                time=time,
+                ingredients=ingredients,
+                steps=steps,
+                rating=rating,
+            )
+
+            for category in categories:
+                meal.categories.add(category)
+
+            for comment_text in comment_texts:
+                Comment.objects.create(
+                    author=self.request.user, meal=meal, text=comment_text
+                )
 
         return super().form_valid(form)

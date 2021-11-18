@@ -14,4 +14,5 @@ urlpatterns = [
         views.CommentCreateView.as_view(),
         name="createcomment",
     ),
+    path("upload", views.UploadJsonView.as_view(), name="upload"),
 ]
