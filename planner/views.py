@@ -139,12 +139,14 @@ class UploadJsonView(FormView):
             time = meal_dict["time"]
             ingredients = meal_dict["ingredients"]
             steps = meal_dict["steps"]
-            category_names = meal_dict.get("categories", "").split()
+            category_names = meal_dict.get("categories", "").split(",")
+
             categories = []
             if category_names and category_names[0]:
                 for category_name in category_names:
                     category, _ = Category.objects.get_or_create(name=category_name)
                     categories.append(category)
+
             comment_texts = meal_dict.get("comments", [])
 
             # Overwrite if there is an existing meal with the name
