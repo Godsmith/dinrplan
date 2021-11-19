@@ -14,7 +14,12 @@
           <table class="table table-bordered">
             <tbody>
               {% for day in week %}
-                <tr>
+                {% now "Y-m-d" as todays_date %}
+                {% if day.date.isoformat == todays_date %}
+                  <tr class="table-active">
+                {% else %}
+                  <tr>
+                {% endif %}
                   <td class="text-nowrap" style="width:1%">{{day.weekday_name}}<br>{{ day.date.isoformat }}</td>
                   <td>
                     {% for meal in day.meals.all %}
