@@ -34,7 +34,16 @@ def index(request):
 class MealUpdateView(UpdateView):
     model = Meal
     template_name = "planner/updatemeal.html"
-    fields = ["name", "source", "persons", "time", "ingredients", "steps", "rating"]
+    fields = [
+        "name",
+        "source",
+        "persons",
+        "time",
+        "ingredients",
+        "steps",
+        "categories",
+        "rating",
+    ]
     success_url = (
         "/"  # reverse("index")  # this does not work; must be in get_success_url
     )
