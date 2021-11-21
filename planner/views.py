@@ -231,3 +231,17 @@ class UploadJsonView(FormView):
                         name=meal_name, author=self.request.user
                     )
                     day.meals.add(meal)
+
+
+class RecipesView(View):
+    def get(self, request, *args, **kwargs):
+        created_meals = [
+            meal
+            for meal in Meal.objects.filter(author=request.user).order_by("name")
+            if meal.is_created
+        ]
+        return render(
+            request,
+            "planner/recipes.html",
+            {"meals": created_meals},
+        )

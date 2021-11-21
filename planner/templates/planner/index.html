@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container-sm">
+  <div class="container-fluid">
     <form class="d-flex" action="{% url 'planner:update_weeks' %}" method="post">
       {% csrf_token %}
       <div class="p-2 m-2">Weeks back:</div>

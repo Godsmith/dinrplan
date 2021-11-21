@@ -15,11 +15,11 @@
   <title>{% block title %}dinrplan{% endblock %}</title>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#"><h1>dinrplan</h1></a>
+        <a class="navbar-brand" href="{% url 'planner:index' %}"><h1>dinrplan</h1></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -27,14 +27,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" href="{% url 'planner:index' %}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Recipes</a>
+              <a class="nav-link" href="{% url 'planner:recipes' %}">Recipes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'planner:upload' %}">Upload</a>
             </li>
           </ul>
           <div>
-
             {% if user.is_authenticated %}
             Hi {{ user.username }}! <a href="{% url 'logout' %}">Log Out</a>
             {% else %}
@@ -46,7 +48,7 @@
     </nav>
   </header>
 </div>
-<div class="container">
+<div class="container-fluid">
   <main>
     {% block content %}
     {% endblock %}
