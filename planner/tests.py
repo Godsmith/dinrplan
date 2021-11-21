@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.test import TestCase
 
 # Create your tests here.
@@ -35,6 +37,26 @@ class MainViewTests(TestCase):
         response = self.client.get("/")
 
         self.assertInHTML("My recipe", str(response.content))
+
+    def test_posting_week_offset_and_count_updates_database(self):
+        self.client.login(username="user1", password="user1")
+
+        self.client.post(
+            reverse("planner:update_weeks"),
+            data={"first-week-offset": ["2"], "number-of-weeks-to-show": ["6"]},
+        )
+
+        monday_current_week = timezone.now().date() - timedelta(
+            days=timezone.now().date().weekday()
+        )
+        monday_first_week_shown = monday_current_week + timedelta(days=-2 * 7)
+        monday_last_week_shown = monday_current_week + timedelta(days=3 * 7)
+
+        response = self.client.get("/")
+
+        self.assertIn(monday_first_week_shown.isoformat(), str(response.content))
+        self.assertIn(monday_last_week_shown.isoformat(), str(response.content))
+        self.assertEqual(str(response.content).count("Monday"), 6)
 
 
 class DayViewTests(TestCase):
