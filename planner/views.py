@@ -2,6 +2,8 @@ import json
 from datetime import date, timedelta
 from typing import List
 
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
@@ -12,9 +14,26 @@ from django.utils.dateparse import parse_date
 from .forms import UploadFileForm
 from .models import Day, Meal, Comment, Category
 
+FIRST_WEEK_OFFSET_OPTIONS = [0, 2, 6, 12, 18, 24]
+DEFAULT_FIRST_WEEK_OFFSET = 0
+NUMBER_OF_WEEKS_TO_SHOW_OPTIONS = [1, 2, 3, 6]
+DEFAULT_NUMBER_OF_WEEKS_TO_SHOW = 3
+
 
 def index(request):
-    week_deltas = [-3, -2, -1, 0]
+    first_week_offset = (
+        request.user.first_week_offset
+        if request.user.is_authenticated
+        else DEFAULT_FIRST_WEEK_OFFSET
+    )
+    number_of_weeks_to_show = (
+        request.user.number_of_weeks_to_show
+        if request.user.is_authenticated
+        else DEFAULT_NUMBER_OF_WEEKS_TO_SHOW
+    )
+    week_deltas = range(
+        -first_week_offset, -first_week_offset + number_of_weeks_to_show
+    )
     monday_current_week = date.today() - timedelta(days=date.today().weekday())
     weeks = []
     if request.user.is_authenticated:
@@ -28,7 +47,26 @@ def index(request):
                 days.append(day)
             weeks.append(days)
 
-    return render(request, "planner/index.html", {"weeks": weeks})
+    return render(
+        request,
+        "planner/index.html",
+        {
+            "weeks": weeks,
+            "first_week_offsets": FIRST_WEEK_OFFSET_OPTIONS,
+            "numbers_of_weeks_to_show": NUMBER_OF_WEEKS_TO_SHOW_OPTIONS,
+        },
+    )
+
+
+class UpdateDisplayedWeeksView(View):
+    def post(self, request, *args, **kwargs):
+        request.user.first_week_offset = request.POST.get("first-week-offset")
+        request.user.number_of_weeks_to_show = request.POST.get(
+            "number-of-weeks-to-show"
+        )
+        request.user.save()
+
+        return HttpResponseRedirect(reverse("planner:index"))
 
 
 class MealUpdateView(UpdateView):

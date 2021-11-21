@@ -8,6 +8,30 @@
 
 {% block content %}
   <div class="container-sm">
+    <form class="d-flex" action="{% url 'planner:update_weeks' %}" method="post">
+      {% csrf_token %}
+      <div class="p-2 m-2">Weeks back:</div>
+      <select class="p-2 me-2 mt-2 mb-2" name="first-week-offset">
+        {% for first_week_offset in first_week_offsets %}
+          {% if user.first_week_offset == first_week_offset %}
+            <option value="{{ first_week_offset }}" selected>{{ first_week_offset}}</option>
+          {% else %}
+            <option value="{{ first_week_offset }}">{{ first_week_offset}}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+      <div class="p-2 me-2 mt-2 mb-2">Weeks to display:</div>
+      <select class="p-2 me-4 mt-2 mb-2" name="number-of-weeks-to-show">
+        {% for week_count in numbers_of_weeks_to_show %}
+          {% if user.number_of_weeks_to_show == week_count %}
+            <option value="{{ week_count }}" selected>{{ week_count}}</option>
+          {% else %}
+            <option value="{{ week_count }}">{{ week_count}}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+      <input class="btn btn-outline-success mt-2 mb-2" type="submit" value="Ok">
+    </form>
     <div class="row">
       {% for week in weeks %}
         <div class="col-xl-4 col-md-6 col-sm-12">
