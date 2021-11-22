@@ -24,7 +24,7 @@ class Meal(models.Model):
     rating = models.PositiveSmallIntegerField(
         default=0, validators=[MaxValueValidator(5)]
     )
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
