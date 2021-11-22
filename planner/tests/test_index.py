@@ -1,8 +1,8 @@
 from datetime import timedelta
 
+import pytest
 from django.urls import reverse
 from django.utils import timezone
-import pytest
 
 
 @pytest.mark.django_db

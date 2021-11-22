@@ -1,7 +1,8 @@
 import pytest
 from django.utils import timezone
 
-from planner.models import Meal, Day
+from planner.models import Day
+from planner.models import Meal
 from users.models import User
 
 

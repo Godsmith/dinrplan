@@ -1,18 +1,26 @@
 import json
-from datetime import date, timedelta
+from datetime import date
+from datetime import timedelta
 from typing import List
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
 from django.urls import reverse
-from django.views import View
-from django.views.generic import UpdateView, DetailView, CreateView, FormView
 from django.utils.dateparse import parse_date
+from django.views import View
+from django.views.generic import CreateView
+from django.views.generic import DetailView
+from django.views.generic import FormView
+from django.views.generic import UpdateView
 
 from .forms import UploadFileForm
-from .models import Day, Meal, Comment, Category
+from .models import Category
+from .models import Comment
+from .models import Day
+from .models import Meal
 
 FIRST_WEEK_OFFSET_OPTIONS = [0, 2, 6, 12, 18, 24]
 DEFAULT_FIRST_WEEK_OFFSET = 0

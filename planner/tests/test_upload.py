@@ -3,7 +3,8 @@ from pathlib import Path
 import pytest
 from django.urls import reverse
 
-from planner.models import Meal, Day
+from planner.models import Day
+from planner.models import Meal
 
 
 @pytest.mark.django_db
