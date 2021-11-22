@@ -20,7 +20,7 @@ NUMBER_OF_WEEKS_TO_SHOW_OPTIONS = [1, 2, 3, 6]
 DEFAULT_NUMBER_OF_WEEKS_TO_SHOW = 3
 
 
-def index(request):
+def _get_weeks(request):
     first_week_offset = (
         request.user.first_week_offset
         if request.user.is_authenticated
@@ -46,12 +46,15 @@ def index(request):
                 day, _ = Day.objects.get_or_create(date=date_, user=request.user)
                 days.append(day)
             weeks.append(days)
+    return weeks
 
+
+def index(request):
     return render(
         request,
         "planner/index.html",
         {
-            "weeks": weeks,
+            "weeks": _get_weeks(request),
             "first_week_offsets": FIRST_WEEK_OFFSET_OPTIONS,
             "numbers_of_weeks_to_show": NUMBER_OF_WEEKS_TO_SHOW_OPTIONS,
         },
@@ -66,7 +69,12 @@ class UpdateDisplayedWeeksView(View):
         )
         request.user.save()
 
-        return HttpResponseRedirect(reverse("planner:index"))
+        return HttpResponseRedirect(reverse("planner:weeks"))
+
+
+class WeeksView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, "planner/weeks.html", {"weeks": _get_weeks(request)})
 
 
 class MealUpdateView(UpdateView):

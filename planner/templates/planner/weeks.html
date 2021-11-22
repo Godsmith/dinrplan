@@ -1,0 +1,32 @@
+<div id="weeks" class="row">
+  {% for week in weeks %}
+  <div class="col-xl-4 col-md-6 col-sm-12">
+    <table class="table table-bordered">
+      <tbody>
+      {% for day in week %}
+      {% now "Y-m-d" as todays_date %}
+      {% if day.date.isoformat == todays_date %}
+      <tr class="table-active">
+        {% else %}
+      <tr>
+        {% endif %}
+        <td class="text-nowrap" style="width:1%">{{day.weekday_name}}<br>{{ day.date.isoformat }}</td>
+        <td>
+          {% for meal in day.meals.all %}
+          {% if meal.is_created %}
+          <a class="exists" href="{% url 'planner:showmeal' pk=meal.pk %}">{{ meal.name }}</a>
+          {% else %}
+          <a class="does-not-exist" href="{% url 'planner:updatemeal' pk=meal.pk %}">{{ meal.name }}</a>
+          {% endif %}
+          {% endfor %}
+        </td>
+        <td class="align-middle" style="width:1%" >
+          <a class="btn btn-light" href="{% url 'planner:day' date=day.date %}"><i class="bi bi-pencil"></i></a>
+        </td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endfor %}
+</div>

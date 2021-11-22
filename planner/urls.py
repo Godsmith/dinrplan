@@ -17,4 +17,5 @@ urlpatterns = [
     path("upload", views.UploadJsonView.as_view(), name="upload"),
     path("update_weeks", views.UpdateDisplayedWeeksView.as_view(), name="update_weeks"),
     path("recipes", views.RecipesView.as_view(), name="recipes"),
+    path("weeks", views.WeeksView.as_view(), name="weeks"),
 ]
