@@ -40,7 +40,7 @@ jobs:
     - name: Collect static files
       run: poetry run python manage.py collectstatic
     - name: Run tests
-      run: poetry run coverage run --source="." manage.py test
+      run: poetry run coverage run --source="." -m pytest
     - name: Produce coverage.xml
       run: poetry run coverage xml
     - name: Upload coverage to Codecov

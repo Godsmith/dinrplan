@@ -72,7 +72,7 @@ poetry run python manage.py runserver
 ## Running tests
 
 ```
-poetry run python manage.py test
+poetry run pytest
 ```
 
 ## Deploying
