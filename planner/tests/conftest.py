@@ -7,7 +7,7 @@ from users.models import User
 
 
 @pytest.fixture
-def user(client):
+def user(client, db):
     return User.objects.create_user(username="user1", password="user1")
 
 
@@ -21,3 +21,8 @@ def day(user, meal):
     day = Day.objects.create(date=timezone.now().date(), user=user)
     day.meals.add(meal)
     return day
+
+
+# @pytest.fixture
+# def logged_in_user:
+#     client.login(username="user1", password="user1")

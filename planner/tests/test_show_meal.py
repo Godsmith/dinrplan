@@ -19,7 +19,6 @@ def meal_with_all_attributes(client, user, day):
     return meal
 
 
-@pytest.mark.django_db
 def test_shows_all_properties(client, meal_with_all_attributes):
     response = client.get(
         reverse("planner:showmeal", kwargs={"pk": meal_with_all_attributes.pk})
@@ -35,7 +34,6 @@ def test_shows_all_properties(client, meal_with_all_attributes):
         assert text in str(response.content)
 
 
-@pytest.mark.django_db
 def test_posting_comment_shows_that_comment(client, meal_with_all_attributes):
     client.post(
         reverse("planner:createcomment", kwargs={"pk": meal_with_all_attributes.pk}),

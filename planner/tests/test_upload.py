@@ -7,7 +7,6 @@ from planner.models import Day
 from planner.models import Meal
 
 
-@pytest.mark.django_db
 def test_upload_creates_meal_and_day(client, user):
     client.login(username="user1", password="user1")
     fixtures = Path(__file__).parent / "fixtures"

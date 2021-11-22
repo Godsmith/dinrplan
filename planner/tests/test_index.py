@@ -1,18 +1,15 @@
 from datetime import timedelta
 
-import pytest
 from django.urls import reverse
 from django.utils import timezone
 
 
-@pytest.mark.django_db
 def test_todays_recipe_is_not_shown_on_main_page_if_not_logged_in(client, day):
     response = client.get("/")
 
     assert "My recipe" not in str(response.content)
 
 
-@pytest.mark.django_db
 def test_todays_recipe_is_shown_on_main_page_if_logged_in(client, day):
     client.login(username="user1", password="user1")
 
@@ -21,7 +18,6 @@ def test_todays_recipe_is_shown_on_main_page_if_logged_in(client, day):
     assert "My recipe" in str(response.content)
 
 
-@pytest.mark.django_db
 def test_posting_week_offset_and_count_updates_database(client, day):
     client.login(username="user1", password="user1")
 
@@ -43,3 +39,9 @@ def test_posting_week_offset_and_count_updates_database(client, day):
     assert str(response.content).count("Monday") == 6
 
     assert "My recipe" in str(response.content)
+
+
+# def test_changing_the_dropbox_controlling_how_many_weeks_are_displayed_changes_how_many_weeks_are_displayed(
+#     client, user
+# ):
+#     client.login(username="user1", password="user1")

@@ -3,7 +3,6 @@ from django.urls import reverse
 from django.utils import timezone
 
 
-@pytest.mark.django_db
 def test_posting_name_inserts_that_meal_into_the_day(client, meal, day):
     client.login(username="user1", password="user1")
 
@@ -15,7 +14,6 @@ def test_posting_name_inserts_that_meal_into_the_day(client, meal, day):
     assert list(day.meals.all()) == [meal]
 
 
-@pytest.mark.django_db
 def test_show_current_day_text(client, meal, day):
     client.login(username="user1", password="user1")
 
