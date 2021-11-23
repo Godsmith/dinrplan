@@ -34,7 +34,7 @@ jobs:
         python -m pip install poetry
         poetry install
     - name: Install playwright
-      run: playwright install
+      run: poetry run playwright install
     - name: Run migrations
       run: poetry run python manage.py migrate
     - name: Collect static files
