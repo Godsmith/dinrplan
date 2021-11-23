@@ -1,3 +1,4 @@
+import time
 from datetime import timedelta
 
 from django.urls import reverse
@@ -41,7 +42,25 @@ def test_posting_week_offset_and_count_updates_database(client, day):
     assert "My recipe" in str(response.content)
 
 
-# def test_changing_the_dropbox_controlling_how_many_weeks_are_displayed_changes_how_many_weeks_are_displayed(
-#     client, user
-# ):
-#     client.login(username="user1", password="user1")
+def test_changing_to_displaying_two_weeks_ago_shows_last_monday(
+    live_server, user, page
+):
+    page.goto(live_server.url + "/accounts/login")
+    page.fill('input[name="username"]', "user1")
+    page.fill('input[name="password"]', "user1")
+    page.click("button[type='submit']")
+    page.goto(live_server.url)
+
+    monday_current_week = timezone.now().date() - timedelta(
+        days=timezone.now().date().weekday()
+    )
+    last_monday = (monday_current_week + timedelta(days=-7)).isoformat()
+
+    assert last_monday not in page.content()
+
+    page.select_option('select[name="first-week-offset"]', "2")
+
+    # TODO: do something better here than sleeping
+    time.sleep(0.5)
+
+    assert last_monday in page.content()

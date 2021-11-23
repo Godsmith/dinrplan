@@ -1,9 +1,15 @@
+import os
+
 import pytest
 from django.utils import timezone
 
 from planner.models import Day
 from planner.models import Meal
 from users.models import User
+
+# This is needed for running Django tests with playwright
+# See https://github.com/microsoft/playwright-pytest/issues/29
+os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
 
 
 @pytest.fixture
@@ -23,6 +29,6 @@ def day(user, meal):
     return day
 
 
-# @pytest.fixture
-# def logged_in_user:
-#     client.login(username="user1", password="user1")
+@pytest.fixture
+def logged_in_user(client, user):
+    client.login(username="user1", password="user1")
