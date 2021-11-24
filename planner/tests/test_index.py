@@ -45,6 +45,7 @@ def test_posting_week_offset_and_count_updates_database(client, day):
 def test_changing_to_displaying_two_weeks_ago_shows_last_monday(
     live_server, user, page
 ):
+    # Arrange
     page.goto(live_server.url + "/accounts/login")
     page.fill('input[name="username"]', "user1")
     page.fill('input[name="password"]', "user1")
@@ -58,9 +59,9 @@ def test_changing_to_displaying_two_weeks_ago_shows_last_monday(
 
     assert last_monday not in page.content()
 
+    # Act
     page.select_option('select[name="first-week-offset"]', "2")
+    page.wait_for_load_state("networkidle")
 
-    # TODO: do something better here than sleeping
-    time.sleep(0.5)
-
+    # Assert
     assert last_monday in page.content()
