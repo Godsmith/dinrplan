@@ -6,7 +6,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
-    <form id="update-meal" action="{% url 'planner:updatemeal' pk=object.pk %}" method="post">{% csrf_token %}
+    <form id="update-meal" action="{% url 'planner:editmeal' pk=object.pk %}" method="post">{% csrf_token %}
       {{ form.as_p }}
       <input type="submit" value="Save">
     </form>

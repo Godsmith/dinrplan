@@ -87,7 +87,7 @@ class WeeksView(View):
 
 class MealUpdateView(UpdateView):
     model = Meal
-    template_name = "planner/updatemeal.html"
+    template_name = "planner/modals/edit_meal.html"
     fields = [
         "name",
         "source",
@@ -110,7 +110,7 @@ class MealUpdateView(UpdateView):
 
 class MealDetailView(DetailView):
     model = Meal
-    template_name = "planner/meal_detail.html"
+    template_name = "planner/modals/show_meal.html"
     fields = ["name", "source", "persons", "time", "ingredients", "steps"]
 
 
