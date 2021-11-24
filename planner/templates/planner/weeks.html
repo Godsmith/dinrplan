@@ -1,4 +1,12 @@
 <div id="weeks" class="row">
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      ...
+    </div>
+  </div>
   {% for week in weeks %}
   <div class="col-xl-4 col-md-6 col-sm-12">
     <table class="table table-bordered">
@@ -14,9 +22,11 @@
         <td>
           {% for meal in day.meals.all %}
           {% if meal.is_created %}
-          <a class="exists" href="{% url 'planner:showmeal' pk=meal.pk %}">{{ meal.name }}</a>
+          <a class="exists" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                  hx-get="{% url 'planner:showmeal' pk=meal.pk%}" hx-target=".modal-dialog">{{ meal.name }}</a>
           {% else %}
-          <a class="does-not-exist" href="{% url 'planner:updatemeal' pk=meal.pk %}">{{ meal.name }}</a>
+          <a class="does-not-exist" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
+             hx-get="{% url 'planner:updatemeal' pk=meal.pk%}" hx-target=".modal-dialog">{{ meal.name }}</a>
           {% endif %}
           {% endfor %}
         </td>
