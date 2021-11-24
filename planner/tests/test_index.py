@@ -43,14 +43,10 @@ def test_posting_week_offset_and_count_updates_database(client, day):
 
 
 def test_changing_to_displaying_two_weeks_ago_shows_last_monday(
-    live_server, user, page
+    logged_in_user_on_live_server, page
 ):
     # Arrange
-    page.goto(live_server.url + "/accounts/login")
-    page.fill('input[name="username"]', "user1")
-    page.fill('input[name="password"]', "user1")
-    page.click("button[type='submit']")
-    page.goto(live_server.url)
+    page.goto(logged_in_user_on_live_server.url)
 
     monday_current_week = timezone.now().date() - timedelta(
         days=timezone.now().date().weekday()

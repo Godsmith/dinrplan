@@ -24,7 +24,7 @@ def meal(user):
 
 @pytest.fixture
 def day(user, meal):
-    day = Day.objects.create(date=timezone.now().date(), user=user)
+    day, _ = Day.objects.get_or_create(date=timezone.now().date(), user=user)
     day.meals.add(meal)
     return day
 
@@ -32,3 +32,12 @@ def day(user, meal):
 @pytest.fixture
 def logged_in_user(client, user):
     client.login(username="user1", password="user1")
+
+
+@pytest.fixture
+def logged_in_user_on_live_server(live_server, user, page):
+    page.goto(live_server.url + "/accounts/login")
+    page.fill('input[name="username"]', "user1")
+    page.fill('input[name="password"]', "user1")
+    page.click("button[type='submit']")
+    return live_server
