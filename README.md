@@ -75,6 +75,14 @@ poetry run python manage.py runserver
 poetry run pytest
 ```
 
+After changing database schema, run
+
+```commandline
+poetry run pytest --create-db
+```
+
+to force re-creation of the test database.
+
 ## Deploying
 
 ```commandline
