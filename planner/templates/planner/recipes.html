@@ -23,7 +23,8 @@
         {% for meal in meals %}
           <tr>
             <td>
-              <a href="{% url 'planner:showmeal' pk=meal.pk %}">{{ meal.name }}</a>
+              <a class="exists" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                 hx-get="{% url 'planner:showmeal' pk=meal.pk%}" hx-target=".modal-dialog">{{ meal.name }}</a>
             </td>
             <td>
               <input class="form-check-input" type="checkbox" name="delete-meal-{{ meal.pk }}">
