@@ -114,6 +114,15 @@ class MealDetailView(DetailView):
     fields = ["name", "source", "persons", "time", "ingredients", "steps"]
 
 
+class MealDeleteView(View):
+    def post(self, request, *args, **kwargs):
+        keys = [key for key in request.POST.keys() if key.startswith("delete")]
+        meal_pks = [int(key.split("-")[-1]) for key in keys]
+        for pk in meal_pks:
+            Meal.objects.get(pk=pk).delete()
+        return HttpResponseRedirect(reverse("planner:recipes"))
+
+
 class DayView(View):
     def get(self, request, *args, **kwargs):
         day, _ = Day.objects.get_or_create(
