@@ -11,7 +11,7 @@
       <tr>
         {% endif %}
         <td class="text-nowrap" style="width:1%">{{day.weekday_name}}<br>{{ day.date.isoformat }}</td>
-        <td>
+        <td class="day-{{ day.date.isoformat }}">
           {% for meal in day.meals.all %}
           {% if meal.is_created %}
           <a class="exists" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
@@ -23,8 +23,8 @@
           {% endfor %}
         </td>
         <td class="align-middle" style="width:1%" >
-          <a class="btn btn-light day-{{ day.date.isoformat }}" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
-             hx-get="{% url 'planner:day' date=day.date.isoformat %}" hx-target=".modal-dialog"><i class="bi bi-pencil"></i></a>
+          <a class="btn btn-light day-{{ day.date.isoformat }}" href="#"
+             hx-get="{% url 'planner:day' date=day.date.isoformat %}" hx-target="td.day-{{ day.date.isoformat }}"><i class="bi bi-pencil"></i></a>
         </td>
       </tr>
       {% endfor %}

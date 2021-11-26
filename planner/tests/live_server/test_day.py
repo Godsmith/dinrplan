@@ -13,10 +13,12 @@ def test_all_modals_are_hidden_by_default(
     assert page.is_hidden(".selectize-input")
 
 
-def test_clicking_day_opens_day_modal(logged_in_user_on_live_server, day, user, page):
-    page.goto(logged_in_user_on_live_server.url)
+def test_clicking_edit_day_button_shows_input_for_editing_day(
+    logged_in_user_on_live_server, day, user, page
+):
     # Arrange
     date = timezone.now().date().isoformat()
+    page.goto(logged_in_user_on_live_server.url)
 
     # Act
     page.click(f"a.day-{date}")
