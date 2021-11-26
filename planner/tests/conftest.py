@@ -1,6 +1,7 @@
 import os
 
 import pytest
+from django.conf import settings
 from django.utils import timezone
 
 from planner.models import Day
@@ -36,8 +37,25 @@ def logged_in_user(client, user):
 
 @pytest.fixture
 def logged_in_user_on_live_server(live_server, user, page):
+    # Set debug to True, or whitenoise will add a hash to all static files which means they cannot be found
+    # in the live server test cases.
+    settings.DEBUG = True
     page.goto(live_server.url + "/accounts/login")
     page.fill('input[name="username"]', "user1")
     page.fill('input[name="password"]', "user1")
     page.click("button[type='submit']")
     return live_server
+
+
+@pytest.fixture
+def create_meal_for_today(day, user):
+    meal = Meal.objects.create(
+        name="My recipe",
+        author=user,
+        source="mysource",
+        persons=8,
+        time="30 min",
+        ingredients="myingredients",
+        steps="mysteps",
+    )
+    day.meals.add(meal)

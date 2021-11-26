@@ -136,7 +136,7 @@ class DayView(View):
         ]
         return render(
             request,
-            "planner/day.html",
+            "planner/modals/day.html",
             {
                 "day": day,
                 "todays_meal_names": todays_meal_names,

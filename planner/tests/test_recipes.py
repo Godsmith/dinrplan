@@ -3,20 +3,6 @@ import pytest
 from planner.models import Meal
 
 
-@pytest.fixture
-def create_meal_for_today(day, user):
-    meal = Meal.objects.create(
-        name="My recipe",
-        author=user,
-        source="mysource",
-        persons=8,
-        time="30 min",
-        ingredients="myingredients",
-        steps="mysteps",
-    )
-    day.meals.add(meal)
-
-
 def test_meal_modal_is_hidden_by_default(
     logged_in_user_on_live_server, page, create_meal_for_today
 ):

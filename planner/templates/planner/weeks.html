@@ -23,7 +23,8 @@
           {% endfor %}
         </td>
         <td class="align-middle" style="width:1%" >
-          <a class="btn btn-light" href="{% url 'planner:day' date=day.date %}"><i class="bi bi-pencil"></i></a>
+          <a class="btn btn-light day-{{ day.date.isoformat }}" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
+             hx-get="{% url 'planner:day' date=day.date.isoformat %}" hx-target=".modal-dialog"><i class="bi bi-pencil"></i></a>
         </td>
       </tr>
       {% endfor %}
