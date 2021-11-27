@@ -11,6 +11,7 @@ Meal planner/recipe database built with Python, Django and PostgreSQL
 - Python 3.9+
 - PostgreSQL
 - poetry
+- Heroku CLI
 
 ## Setting up the development environment
 
@@ -39,6 +40,14 @@ Edit the database user and password.
 poetry install
 ```
 
+### Activate the poetry shell
+
+```
+poetry shell
+```
+
+The following commands assume that the shell is activated.
+
 ### Install pre-commit
 
 ```
@@ -48,37 +57,43 @@ pre-commit install
 ### Migrate database
 
 ```
-poetry run python manage.py migrate
+python manage.py migrate
 ```
 
 ### Collect static files
 
 ```commandline
-poetry run python manage.py collectstatic
+python manage.py collectstatic
+```
+
+### Install playwright
+
+```commandline
+playwright install
 ```
 
 ### Ensure tests pass
 
 ```commandline
-poetry run python manage.py test
+pytest
 ```
 
 ## Running development server
 
 ```
-poetry run python manage.py runserver
+python manage.py runserver
 ```
 
 ## Running tests
 
 ```
-poetry run pytest
+pytest
 ```
 
 After changing database schema, run
 
 ```commandline
-poetry run pytest --create-db
+pytest --create-db
 ```
 
 to force re-creation of the test database.
