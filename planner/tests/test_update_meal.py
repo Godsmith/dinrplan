@@ -12,12 +12,8 @@ def test_meals_without_source_has_class_does_not_exist(
 
 
 def test_meals_with_source_has_class_exists(
-    logged_in_user_on_live_server, day, page, user
+    logged_in_user_on_live_server, create_meal_for_today, page
 ):
-    meal, _ = Meal.objects.get_or_create(name="My recipe", author=user)
-    meal.source = "my_source"
-    meal.save()
-
     page.goto(logged_in_user_on_live_server.url)
 
     assert not page.is_visible(".does-not-exist")

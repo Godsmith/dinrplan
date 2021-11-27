@@ -48,7 +48,8 @@ def logged_in_user_on_live_server(live_server, user, page):
 
 
 @pytest.fixture
-def create_meal_for_today(day, user):
+def create_meal_for_today(user):
+    day, _ = Day.objects.get_or_create(date=timezone.now().date(), user=user)
     meal = Meal.objects.create(
         name="My recipe",
         author=user,
