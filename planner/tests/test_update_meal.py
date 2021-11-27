@@ -2,18 +2,18 @@ from planner.models import Category
 from planner.models import Meal
 
 
-def test_meals_without_source_has_class_does_not_exist(live_server, day, page):
-    page.goto(live_server.url)
+def test_meals_without_source_has_class_does_not_exist(logged_in_client, day):
+    response = logged_in_client.get("/")
 
-    assert page.is_visible(".does-not-exist")
-    assert not page.is_visible(".exists")
+    assert "does-not-exist" in str(response.content)
+    assert "exists" not in str(response.content)
 
 
-def test_meals_with_source_has_class_exists(live_server, create_meal_for_today, page):
-    page.goto(live_server.url)
+def test_meals_with_source_has_class_exists(logged_in_client, create_meal_for_today):
+    response = logged_in_client.get("/")
 
-    assert not page.is_visible(".does-not-exist")
-    assert page.is_visible(".exists")
+    assert "exists" in str(response.content)
+    assert "does-not-exist" not in str(response.content)
 
 
 def test_adding_source_to_meal_makes_that_meal_exist(live_server, day, page):

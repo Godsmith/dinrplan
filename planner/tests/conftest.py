@@ -51,8 +51,9 @@ def day(user, meal):
 
 
 @pytest.fixture
-def logged_in_user(client, user):
+def logged_in_client(client, user):
     client.login(username="user1", password="user1")
+    return client
 
 
 @pytest.fixture
