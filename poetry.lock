@@ -214,7 +214,6 @@ python-versions = "*"
 [package.dependencies]
 dj-database-url = ">=0.5.0"
 django = "*"
-psycopg2 = "*"
 whitenoise = "*"
 
 [[package]]
@@ -384,14 +383,6 @@ nodeenv = ">=0.11.1"
 pyyaml = ">=5.1"
 toml = "*"
 virtualenv = ">=20.0.8"
-
-[[package]]
-name = "psycopg2"
-version = "2.9.2"
-description = "psycopg2 - Python-PostgreSQL Database Adapter"
-category = "main"
-optional = false
-python-versions = ">=3.6"
 
 [[package]]
 name = "psycopg2-binary"
