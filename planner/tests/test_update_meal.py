@@ -1,3 +1,4 @@
+from planner.models import Category
 from planner.models import Meal
 
 
@@ -44,10 +45,11 @@ def test_clicking_meal_that_does_not_exist_opens_edit_dialog(
 
     page.click(".does-not-exist")
 
+    # TODO: is this correct? Should there be a "not" here?
     assert not page.is_visible("input.name")
 
 
-def test_clicking_meal_that_exists_opens_edit_dialog(
+def test_clicking_meal_that_exists_opens_show_dialog(
     logged_in_user_on_live_server, day, user, page
 ):
     # Arrange
@@ -69,4 +71,22 @@ def test_clicking_meal_that_exists_opens_edit_dialog(
 
     # Assert
     page.wait_for_load_state("networkidle")
+
+    # TODO: this is a poor way of testing if this modal is open, check for an id instead
     assert "Source" in str(page.content())
+
+
+def test_add_category_to_meal(logged_in_user_on_live_server, day, user, page):
+    # Arrange
+    Category.objects.create(name="Vegetariskt")
+    page.goto(logged_in_user_on_live_server.url)
+    page.click(".does-not-exist")
+
+    # Act
+    page.click(".selectize-input")
+    page.type(".selectize-input", "Vegetariskt")
+    page.keyboard.press("Enter")
+    page.click('button[form="update-meal"]')
+
+    # Assert
+    assert Meal.objects.all()[0].categories.all()[0].name == "Vegetariskt"

@@ -1,5 +1,15 @@
 <!--TODO: rename to update_meal_modal.html or similar-->
 
+<script>
+  $('#id_categories').selectize({
+    delimiter: ';',
+    createOnBlur: true,
+    onItemAdd: function() {
+      // Close dropdown when choosing an option
+      this.close();
+    }
+  });
+</script>
 <div class="modal-content">
   <div class="modal-header">
     <h5 class="modal-title" id="exampleModalLabel">{{ object.name }}</h5>
