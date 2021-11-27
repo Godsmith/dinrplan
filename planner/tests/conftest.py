@@ -1,7 +1,8 @@
 import os
+from pathlib import Path
 
 import pytest
-from django.conf import settings
+from django.test.client import Client
 from django.utils import timezone
 
 from planner.models import Day
@@ -11,6 +12,25 @@ from users.models import User
 # This is needed for running Django tests with playwright
 # See https://github.com/microsoft/playwright-pytest/issues/29
 os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
+
+
+@pytest.fixture
+def page(context, user):
+    client = Client()
+    client.login(username="user1", password="user1")
+    cookie = client.cookies["sessionid"]
+    context.add_cookies(
+        [
+            {
+                "name": "sessionid",
+                "value": cookie.value,
+                "secure": False,
+                "domain": "localhost",
+                "path": "/",
+            }
+        ]
+    )
+    return context.new_page()
 
 
 @pytest.fixture
@@ -33,18 +53,6 @@ def day(user, meal):
 @pytest.fixture
 def logged_in_user(client, user):
     client.login(username="user1", password="user1")
-
-
-@pytest.fixture
-def logged_in_user_on_live_server(live_server, user, page):
-    # Set debug to True, or whitenoise will add a hash to all static files which means they cannot be found
-    # in the live server test cases.
-    settings.DEBUG = True
-    page.goto(live_server.url + "/accounts/login")
-    page.fill('input[name="username"]', "user1")
-    page.fill('input[name="password"]', "user1")
-    page.click("button[type='submit']")
-    return live_server
 
 
 @pytest.fixture
