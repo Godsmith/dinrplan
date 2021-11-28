@@ -25,10 +25,8 @@ def test_clicking_edit_day_button_shows_input_for_editing_day(live_server, day, 
     assert page.is_visible(".selectize-input")
 
 
-def test_posting_name_inserts_that_meal_into_the_day(client, meal, day):
-    client.login(username="user1", password="user1")
-
-    client.post(
+def test_posting_name_inserts_that_meal_into_the_day(logged_in_client, meal, day):
+    logged_in_client.post(
         reverse("planner:day", kwargs={"date": timezone.now().date()}),
         data={"select": ["My recipe"]},
     )
@@ -36,7 +34,5 @@ def test_posting_name_inserts_that_meal_into_the_day(client, meal, day):
     assert list(day.meals.all()) == [meal]
 
 
-def test_show_current_day_text(client, meal, day):
-    client.login(username="user1", password="user1")
-
-    client.get(reverse("planner:day", kwargs={"date": timezone.now().date()}))
+def test_show_current_day_text(logged_in_client, meal, day):
+    logged_in_client.get(reverse("planner:day", kwargs={"date": timezone.now().date()}))
