@@ -23,7 +23,7 @@
           {% endfor %}
         </td>
         <td class="align-middle" style="width:1%" >
-          <a class="btn btn-light day-{{ day.date.isoformat }}" href="#"
+          <a class="btn btn-light day-{{ day.date.isoformat }} edit-day" href="#"
              hx-get="{% url 'planner:day' date=day.date.isoformat %}" hx-target="td.day-{{ day.date.isoformat }}"><i class="bi bi-pencil"></i></a>
         </td>
       </tr>

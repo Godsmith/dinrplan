@@ -26,6 +26,6 @@
     <option value="{{ meal_name }}">{{ meal_name }}</option>
     {% endfor %}
   </select>
-  <button type="button" class="btn btn-secondary hidden" onClick="window.location.reload()" hidden>Cancel</button>
+  <button type="button" class="btn btn-secondary hidden cancel-edit-day" onClick="window.location.reload()" hidden>Cancel</button>
   <button type="submit" form="update-day-{{ day.date.isoformat }}" class="btn btn-primary hidden" hidden>Save changes</button>
 </form>

@@ -1,3 +1,4 @@
+import pytest
 from django.urls import reverse
 from django.utils import timezone
 
@@ -23,6 +24,24 @@ def test_clicking_edit_day_button_shows_input_for_editing_day(live_server, day, 
 
     # Assert
     assert page.is_visible(".selectize-input")
+
+
+@pytest.mark.xfail
+def test_editing_two_days_and_then_pressing_cancel_closes_just_one_edit(
+    live_server, day, page
+):
+    # Arrange
+    page.goto(live_server.url)
+
+    # Act
+    page.locator(".edit-day").first.click()
+    page.locator(".edit-day").nth(1).click()
+    page.wait_for_load_state("networkidle")
+    page.locator(".cancel-edit-day").first.click()
+    page.wait_for_load_state("networkidle")
+
+    # Assert
+    assert page.is_visible(".cancel-edit-day")
 
 
 def test_posting_name_inserts_that_meal_into_the_day(logged_in_client, meal, day):
