@@ -16,7 +16,7 @@
   // second before the javascript is executed. After selectized has done its work, show these elements again.
   $('.hidden').removeAttr('hidden');
 </script>
-<form id="update-day-{{ day.date.isoformat }}" action="{% url 'planner:day' date=day.date %}" method="post">
+<form id="update-day-{{ day.date.isoformat }}" method="post">
   {% csrf_token %}
   <select name="select" id="myselect-{{ day.date.isoformat }}" class="hidden" multiple="multiple" hidden>
     {% for meal_name in todays_meal_names %}
@@ -26,6 +26,9 @@
     <option value="{{ meal_name }}">{{ meal_name }}</option>
     {% endfor %}
   </select>
-  <button type="button" class="btn btn-secondary hidden" onClick="window.location.reload()" hidden>Cancel</button>
-  <button type="submit" form="update-day-{{ day.date.isoformat }}" class="btn btn-primary hidden" hidden>Save changes</button>
+  <button type="button" class="btn btn-secondary hidden" hx-target="td.day-{{ day.date.isoformat }}"
+          hx-get="{% url 'planner:show_day' date=day.date %}" hidden>Cancel</button>
+  <button type="submit" form="update-day-{{ day.date.isoformat }}"
+          class="btn btn-primary hidden" hx-post="{% url 'planner:edit_day' date=day.date.isoformat %}"
+          hx-target="td.day-{{ day.date.isoformat }}" hidden>Save changes</button>
 </form>
