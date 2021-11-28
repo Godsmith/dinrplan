@@ -5,8 +5,10 @@ from typing import List
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.dateparse import parse_date
@@ -123,7 +125,7 @@ class MealDeleteView(View):
         return HttpResponseRedirect(reverse("planner:recipes"))
 
 
-class DayView(View):
+class EditDayView(View):
     def get(self, request, *args, **kwargs):
         day, _ = Day.objects.get_or_create(
             date=date.fromisoformat(kwargs["date"]), user=request.user
@@ -151,12 +153,25 @@ class DayView(View):
             # Raises MultipleObjectsReturned if the user has managed to create multiple meals in some way
             meal, _ = Meal.objects.get_or_create(author=request.user, name=meal_name)
             meals.append(meal)
+        iso_date = date.fromisoformat(kwargs["date"])
+        day, _ = Day.objects.get_or_create(date=iso_date, user=request.user)
+        day.meals.set(meals)
+
+        return redirect("planner:show_day", date=iso_date)
+
+
+class ShowDayView(View):
+    def get(self, request, *args, **kwargs):
         day, _ = Day.objects.get_or_create(
             date=date.fromisoformat(kwargs["date"]), user=request.user
         )
-        day.meals.set(meals)
-
-        return HttpResponseRedirect(reverse("planner:index"))
+        return render(
+            request,
+            "planner/modals/show_day.html",
+            {
+                "day": day,
+            },
+        )
 
 
 class CommentCreateView(CreateView):

@@ -26,7 +26,6 @@ def test_clicking_edit_day_button_shows_input_for_editing_day(live_server, day, 
     assert page.is_visible(".selectize-input")
 
 
-@pytest.mark.xfail
 def test_editing_two_days_and_then_pressing_cancel_closes_just_one_edit(
     live_server, day, page
 ):
@@ -46,7 +45,7 @@ def test_editing_two_days_and_then_pressing_cancel_closes_just_one_edit(
 
 def test_posting_name_inserts_that_meal_into_the_day(logged_in_client, meal, day):
     logged_in_client.post(
-        reverse("planner:day", kwargs={"date": timezone.now().date()}),
+        reverse("planner:edit_day", kwargs={"date": timezone.now().date()}),
         data={"select": ["My recipe"]},
     )
 
@@ -54,4 +53,6 @@ def test_posting_name_inserts_that_meal_into_the_day(logged_in_client, meal, day
 
 
 def test_show_current_day_text(logged_in_client, meal, day):
-    logged_in_client.get(reverse("planner:day", kwargs={"date": timezone.now().date()}))
+    logged_in_client.get(
+        reverse("planner:edit_day", kwargs={"date": timezone.now().date()})
+    )
