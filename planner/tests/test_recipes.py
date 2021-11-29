@@ -20,6 +20,23 @@ def test_clicking_recipe_opens_modal(live_server, page, create_meal_for_today):
     # Act
     page.click(".exists")
     page.wait_for_load_state("networkidle")
+    page.click("#edit-meal")
+    page.wait_for_load_state("networkidle")
+    page.click("button[form='update-meal']")
+
+    # Assert
+    assert "recipes" in page.url
+
+
+def test_submitting_edited_recipe_returns_to_recipes_page(
+    live_server, page, create_meal_for_today
+):
+    # Arrange
+    page.goto(live_server.url + "/recipes")
+
+    # Act
+    page.click(".exists")
+    page.wait_for_load_state("networkidle")
 
     # Assert
     assert page.is_visible(".modal")

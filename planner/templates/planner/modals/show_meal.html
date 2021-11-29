@@ -53,6 +53,7 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    <a class="btn btn-primary" hx-get="{% url 'planner:editmeal' pk=meal.pk%}" hx-target=".modal-dialog" href="#">Edit </a>
+    <a id="edit-meal" class="btn btn-primary" hx-get="{% url 'planner:editmeal' pk=meal.pk%}"
+       hx-target=".modal-dialog" href="#">Edit</a>
   </div>
 </div>

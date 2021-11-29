@@ -100,9 +100,10 @@ class MealUpdateView(UpdateView):
         "categories",
         "rating",
     ]
-    success_url = (
-        "/"  # reverse("index")  # this does not work; must be in get_success_url
-    )
+
+    def get_success_url(self):
+        # Redirect to previous page
+        return self.request.META["HTTP_REFERER"]
 
     def form_valid(self, form):
         """Add author to the created Meal object, since it is a mandatory field"""
