@@ -3,9 +3,7 @@ from datetime import date
 from datetime import timedelta
 from typing import List
 
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.http import HttpResponse
+from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -132,9 +130,11 @@ class EditDayView(View):
             date=date.fromisoformat(kwargs["date"]), user=request.user
         )
         todays_meal_names = [meal.name for meal in day.meals.all()]
-        database_meal_names = [
-            meal.name
+        database_meals = [
+            meal
             for meal in Meal.objects.filter(author=request.user)
+            .annotate(num_days=Count("day"))
+            .order_by("-num_days")
             if meal.is_created
         ]
         return render(
@@ -143,7 +143,7 @@ class EditDayView(View):
             {
                 "day": day,
                 "todays_meal_names": todays_meal_names,
-                "database_meal_names": database_meal_names,
+                "database_meals": database_meals,
             },
         )
 

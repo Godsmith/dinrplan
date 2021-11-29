@@ -9,6 +9,19 @@
     onItemAdd: function() {
       // Close dropdown when choosing a meal
       this.close();
+    },
+    // Use the original ordering of the <option> elements, but hide those that do not match at all.
+    // Workaround from https://github.com/selectize/selectize.js/issues/218
+    score: function(search) {
+      var score = this.getScoreFunction(search);
+      return function(item) {
+        return score(item) ? 1 : 0;
+      };
+    },
+    render: {
+      option: function (item, escape) {
+        return "<div class='option'><span>" + item.name + "</span><span style='float: right; color: #FF0000'>&nbsp;" + item.num_days + "</span></div>"
+      }
     }
   });
 
@@ -22,8 +35,8 @@
     {% for meal_name in todays_meal_names %}
     <option value="{{ meal_name }}" selected="selected">{{ meal_name }}</option>
     {% endfor %}
-    {% for meal_name in database_meal_names %}
-    <option value="{{ meal_name }}">{{ meal_name }}</option>
+    {% for meal in database_meals %}
+    <option data-data='{"name": "{{ meal.name }}", "num_days": "{{ meal.num_days }}"}'>{{ meal.name }}</option>
     {% endfor %}
   </select>
   <button type="button" class="btn btn-secondary hidden cancel-edit-day" hx-target="td.day-{{ day.date.isoformat }}"
