@@ -31,18 +31,18 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install poetry
-        poetry install
+        python -m pip install hatch
+        hatch env create
     - name: Install playwright
-      run: poetry run playwright install
+      run: hatch run playwright install
     - name: Run migrations
-      run: poetry run python manage.py migrate
+      run: hatch run python manage.py migrate
     - name: Collect static files
-      run: poetry run python manage.py collectstatic
+      run: hatch run python manage.py collectstatic
     - name: Run tests
-      run: poetry run coverage run --source="." -m pytest
+      run: hatch run coverage run --source="." -m pytest
     - name: Produce coverage.xml
-      run: poetry run coverage xml
+      run: hatch run coverage xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
