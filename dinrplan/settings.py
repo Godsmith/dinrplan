@@ -27,7 +27,8 @@ ALLOWED_HOSTS = [
     ".localhost",
     "127.0.0.1",
     "[::1]",
-    "dinrplan.herokuapp.com",
+    "dinrplan.herokuapp.com",  # to enable deploying on heroku
+    "iqfmextzaw.eu09.qoddiapp.com",  # to enable deploying on qoddi
 ]
 
 # Application definition
