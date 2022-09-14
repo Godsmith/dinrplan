@@ -27,7 +27,7 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.9
-    - name: psycopg2 prerequisites
+    - name: Install prerequisites for psycopg2
       run: sudo apt-get install libpq-dev
     - name: Install dependencies
       run: |
@@ -69,10 +69,9 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     env:
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - uses: superfly/flyctl-actions/setup-flyctl@master
       # manage.py collectstatic that is run in Dockerfile crashes if not SECRET_KEY present
-      - run: flyctl deploy --remote-only --env SECRET_KEY=$SECRET_KEY
+      - run: flyctl deploy --remote-only --env SECRET_KEY="${{ secrets.SECRET_KEY }}"
