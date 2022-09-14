@@ -26,6 +26,7 @@ def test_clicking_edit_day_button_shows_input_for_editing_day(live_server, day, 
     assert page.is_visible(".selectize-input")
 
 
+@pytest.mark.skip(reason="Unstable")
 def test_editing_two_days_and_then_pressing_cancel_closes_just_one_edit(
     live_server, day, page
 ):
