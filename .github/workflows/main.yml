@@ -2,6 +2,7 @@ name: Tests
 on: [push]
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     env:
       SECRET_KEY: mysecretkey
@@ -47,3 +48,13 @@ jobs:
       uses: codecov/codecov-action@v2
       with:
         fail_ci_if_error: true
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
