@@ -1,4 +1,4 @@
-ARG PYTHON_VERSION=3.7
+ARG PYTHON_VERSION=3.9
 
 FROM python:${PYTHON_VERSION}
 
@@ -12,10 +12,14 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /app
 WORKDIR /app
 
-COPY requirements.txt .
+COPY . .
+
+# Even though we use hatch locally, we have to use the system python in the Dockerfile
+# for it to work on fly.io for some reason.
+RUN pip install hatch
+RUN hatch dep show requirements > requirements.txt
 RUN pip install -r requirements.txt
 
-COPY . .
 
 RUN python manage.py collectstatic --noinput
 

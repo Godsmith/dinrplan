@@ -12,24 +12,38 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
+import environ
 
-load_dotenv()
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("ENV") == "development"
+# Take environment variables from .env file
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
-ALLOWED_HOSTS = [
-    "0.0.0.0",
-    ".localhost",
-    "127.0.0.1",
-    "[::1]",
-    "dinrplan.herokuapp.com",  # to enable deploying on heroku
-    "iqfmextzaw.eu09.qoddiapp.com",  # to enable deploying on qoddi
-]
+# False if not in os.environ because of casting above
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = env("DEBUG")
+
+# Raises Django's ImproperlyConfigured
+# exception if SECRET_KEY not in os.environ
+SECRET_KEY = env("SECRET_KEY")
+
+# Parse database connection url strings
+# like psql://user:pass@127.0.0.1:8458/db
+DATABASES = {
+    # read os.environ['DATABASE_URL'] and raises
+    # ImproperlyConfigured exception if not found
+    #
+    # The db() method is an alias for db_url().
+    "default": env.db(),
+}
+
+ALLOWED_HOSTS = ["0.0.0.0", ".localhost", "127.0.0.1", "[::1]", "dinrplan.fly.dev"]
 
 # Application definition
 
@@ -77,13 +91,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "dinrplan.wsgi.application"
 
-# Database
-# This is overridden by django_heroku and taken from the DATABASE_URL environment variable instead.
-DATABASES = {}
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -131,13 +140,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # The URLs to which the user is redirected after login and logout
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
-
-# Configure Django App for Heroku.
-import django_heroku
-
-django_heroku.settings(locals())
-
-# django_heroku always adds SSL mode to the database, but we don't use that locally, so remove that again
-# https://github.com/heroku/heroku-buildpack-pgbouncer/issues/118
-if os.environ.get("ENV") == "development":
-    del DATABASES["default"]["OPTIONS"]["sslmode"]
