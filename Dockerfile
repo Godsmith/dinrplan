@@ -20,7 +20,11 @@ RUN pip install hatch
 RUN hatch dep show requirements > requirements.txt
 RUN pip install -r requirements.txt
 
-
+# These environment variables are needed for collectstatic to run, but they are stored
+# in secrets in fly.io which are not available during the build process. So just set
+# them to non-empty strings in the meantime.
+ARG SECRET_KEY=dummy
+ARG DATABASE_URL=dummy
 RUN python manage.py collectstatic --noinput
 
 

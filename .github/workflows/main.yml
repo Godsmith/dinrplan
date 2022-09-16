@@ -73,6 +73,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      # manage.py collectstatic that is run in Dockerfile crashes if not SECRET_KEY present
-      # TODO: Currently a lot of debug stuff, clear that out
-      - run: flyctl deploy --remote-only --build-arg HELLO=hello --env SECRET_KEY="${{ secrets.SECRET_KEY }}" --build-arg SECRET_KEY="${{ secrets.SECRET_KEY }}" --build-secret SECRET_KEY="${{ secrets.SECRET_KEY }}"
+      - run: flyctl deploy --remote-only
