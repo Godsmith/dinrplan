@@ -1,6 +1,6 @@
-import pytest
 from django.urls import reverse
 from django.utils import timezone
+from playwright.sync_api import Page
 
 
 def test_all_modals_are_hidden_by_default(live_server, page, create_meal_for_today):
@@ -26,22 +26,27 @@ def test_clicking_edit_day_button_shows_input_for_editing_day(live_server, day, 
     assert page.is_visible(".selectize-input")
 
 
-@pytest.mark.skip(reason="Unstable")
 def test_editing_two_days_and_then_pressing_cancel_closes_just_one_edit(
-    live_server, day, page
+    live_server, day, page: Page
 ):
-    # Arrange
+    # Given a logged in user on the main page
     page.goto(live_server.url)
 
-    # Act
+    # When clicking the first and second edit buttons
     page.locator(".edit-day").first.click()
     page.locator(".edit-day").nth(1).click()
-    page.wait_for_load_state("networkidle")
-    page.locator(".cancel-edit-day").first.click()
-    page.wait_for_load_state("networkidle")
+    # Waiting for load state not always working here for some reason, so wait
+    # a specific time instaed
+    page.wait_for_timeout(100)
+    # Then there shall be two cancel buttons visible
+    assert page.locator(".cancel-edit-day").count() == 2
 
-    # Assert
-    assert page.is_visible(".cancel-edit-day")
+    # When one cancel button is pressed
+    page.locator(".cancel-edit-day").first.click()
+    page.wait_for_timeout(100)
+
+    # There is just one cancel button visible
+    assert page.locator(".cancel-edit-day").count() == 1
 
 
 def test_posting_name_inserts_that_meal_into_the_day(logged_in_client, meal, day):
