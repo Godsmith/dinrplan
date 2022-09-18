@@ -4,6 +4,7 @@ from datetime import timedelta
 from typing import List
 
 from django.db.models import Count
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -122,6 +123,30 @@ class MealDeleteView(View):
         for pk in meal_pks:
             Meal.objects.get(pk=pk).delete()
         return HttpResponseRedirect(reverse("planner:recipes"))
+
+
+class DragView(View):
+    """Called when dragging from or dropping on a day, when you want to move a set of meals from one day to another."""
+
+    def post(self, request, *args, **kwargs):
+        """When dragging from a day, store that date in a variable.
+        When dropping on a day, exchange the meals of the source day and the target day."""
+        event_type = json.loads(request.headers["Triggering-Event"])["type"]
+        if event_type == "dragstart":
+            request.session["date_dragged_from"] = kwargs["date"]
+            return HttpResponse(status=204)
+        elif event_type == "drop":
+            source_day, _ = Day.objects.get_or_create(
+                date=date.fromisoformat(request.session["date_dragged_from"]),
+                user=request.user,
+            )
+            target_day, _ = Day.objects.get_or_create(
+                date=date.fromisoformat(kwargs["date"]), user=request.user
+            )
+            previous_source_day_meals = list(source_day.meals.all())
+            source_day.meals.set(target_day.meals.all())
+            target_day.meals.set(previous_source_day_meals)
+            return HttpResponseRedirect(reverse("planner:weeks"))
 
 
 class EditDayView(View):

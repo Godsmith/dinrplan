@@ -47,7 +47,7 @@ def test_editing_two_days_and_then_pressing_cancel_closes_just_one_edit(
 def test_posting_name_inserts_that_meal_into_the_day(logged_in_client, meal, day):
     logged_in_client.post(
         reverse("planner:edit_day", kwargs={"date": timezone.now().date()}),
-        data={"select": ["My recipe"]},
+        data={"select": ["Recipe for today"]},
     )
 
     assert list(day.meals.all()) == [meal]

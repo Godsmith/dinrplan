@@ -20,4 +20,6 @@ urlpatterns = [
     path("update_weeks", views.UpdateDisplayedWeeksView.as_view(), name="update_weeks"),
     path("recipes", views.RecipesView.as_view(), name="recipes"),
     path("weeks", views.WeeksView.as_view(), name="weeks"),
+    # Called when dragging from or dropping on a day
+    path("drag/<date>", views.DragView.as_view(), name="drag"),
 ]

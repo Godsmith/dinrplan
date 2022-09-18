@@ -51,7 +51,7 @@ def test_not_created_recipes_are_not_visible_on_recipes_page(
     response = logged_in_client.get("/recipes")
 
     # Assert
-    assert "My recipe" not in str(response.content)
+    assert "Recipe for today" not in str(response.content)
 
 
 def test_recipes_are_visible_on_recipes_page(logged_in_client, create_meal_for_today):
@@ -61,7 +61,7 @@ def test_recipes_are_visible_on_recipes_page(logged_in_client, create_meal_for_t
     response = logged_in_client.get("/recipes")
 
     # Assert
-    assert "My recipe" in str(response.content)
+    assert "Recipe for today" in str(response.content)
 
 
 def test_deleting_meal_removes_it_from_list(live_server, page, create_meal_for_today):
@@ -74,4 +74,4 @@ def test_deleting_meal_removes_it_from_list(live_server, page, create_meal_for_t
     page.click("#delete-selected")
 
     # Assert
-    assert "My recipe" not in page.content()
+    assert "Recipe for today" not in page.content()

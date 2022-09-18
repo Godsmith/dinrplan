@@ -140,3 +140,17 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # The URLs to which the user is redirected after login and logout
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "DEBUG" if DEBUG else "WARNING",
+    },
+}

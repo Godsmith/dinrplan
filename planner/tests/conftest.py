@@ -40,7 +40,7 @@ def user(client, db):
 
 @pytest.fixture
 def meal(user):
-    return Meal.objects.create(name="My recipe", author=user)
+    return Meal.objects.create(name="Recipe for today", author=user)
 
 
 @pytest.fixture
@@ -58,9 +58,26 @@ def logged_in_client(client, user):
 
 @pytest.fixture
 def create_meal_for_today(user):
-    day, _ = Day.objects.get_or_create(date=timezone.now().date(), user=user)
+    date = timezone.now()
+    day, _ = Day.objects.get_or_create(date=date, user=user)
     meal = Meal.objects.create(
-        name="My recipe",
+        name="Recipe for today",
+        author=user,
+        source="mysource",
+        persons=8,
+        time="30 min",
+        ingredients="myingredients",
+        steps="mysteps",
+    )
+    day.meals.add(meal)
+
+
+@pytest.fixture
+def create_meal_for_today_and_tomorrow(create_meal_for_today, user):
+    date = timezone.now() + timezone.timedelta(days=1)
+    day, _ = Day.objects.get_or_create(date=date, user=user)
+    meal = Meal.objects.create(
+        name="Recipe for tomorrow",
         author=user,
         source="mysource",
         persons=8,
