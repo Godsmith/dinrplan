@@ -2,7 +2,7 @@
   $('#id_categories').selectize({
     delimiter: ';',
     createOnBlur: true,
-    onItemAdd: function() {
+    onItemAdd: function () {
       // Close dropdown when choosing an option
       this.close();
     }
@@ -14,13 +14,12 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
-    <form id="update-meal" action="{% url 'planner:editmeal' pk=object.pk %}" method="post">{% csrf_token %}
+    <form id="update-meal" hx-post="{% url 'planner:editmeal' pk=object.pk %}" hx-target="#weeks">{% csrf_token %}
       {{ form.as_p }}
-      <input type="submit" value="Save">
     </form>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    <button type="submit" form="update-meal" class="btn btn-primary">Save changes</button>
+    <button type="submit" form="update-meal" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
   </div>
 </div>

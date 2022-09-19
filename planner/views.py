@@ -99,15 +99,14 @@ class MealUpdateView(UpdateView):
         "categories",
         "rating",
     ]
-
-    def get_success_url(self):
-        # Redirect to previous page
-        return self.request.META["HTTP_REFERER"]
+    success_url = "not used since we override form_valid, but if we don't have this Django throws an exception"
 
     def form_valid(self, form):
         """Add author to the created Meal object, since it is a mandatory field"""
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        super().form_valid(form)
+        # Return the weeks view to htmx, so that the text color updates
+        return HttpResponseRedirect(reverse("planner:weeks"))
 
 
 class MealDetailView(DetailView):

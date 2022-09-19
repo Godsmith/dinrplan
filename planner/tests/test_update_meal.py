@@ -1,3 +1,5 @@
+from playwright.sync_api import Page
+
 from planner.models import Category
 from planner.models import Meal
 
@@ -16,13 +18,13 @@ def test_meals_with_source_has_class_exists(logged_in_client, create_meal_for_to
     assert "does-not-exist" not in str(response.content)
 
 
-def test_adding_source_to_meal_makes_that_meal_exist(live_server, day, page):
+def test_adding_source_to_meal_makes_that_meal_exist(live_server, day, page: Page):
     page.goto(live_server.url)
     page.click(".does-not-exist")
     page.fill('input[name="source"]', "my_source")
     page.click('button[form="update-meal"]')
+    page.wait_for_selector(".does-not-exist", state="hidden")
 
-    assert not page.is_visible(".does-not-exist")
     assert page.is_visible(".exists")
 
 
@@ -62,7 +64,7 @@ def test_clicking_meal_that_exists_opens_show_dialog(live_server, day, user, pag
     assert "Source" in str(page.content())
 
 
-def test_add_category_to_meal(live_server, day, user, page):
+def test_add_category_to_meal(live_server, day, user, page: Page):
     # Arrange
     Category.objects.create(name="Vegetariskt")
     page.goto(live_server.url)
@@ -73,6 +75,7 @@ def test_add_category_to_meal(live_server, day, user, page):
     page.type(".selectize-input", "Vegetariskt")
     page.keyboard.press("Enter")
     page.click('button[form="update-meal"]')
+    page.wait_for_selector('button[form="update-meal"]', state="hidden")
 
     # Assert
     assert Meal.objects.all()[0].categories.all()[0].name == "Vegetariskt"
