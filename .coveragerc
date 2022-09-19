@@ -1,2 +1,5 @@
 [run]
-concurrency = greenlet
+source = .
+
+[report]
+show_missing = true
