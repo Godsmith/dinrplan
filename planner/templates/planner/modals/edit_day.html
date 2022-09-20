@@ -39,8 +39,6 @@
     <option data-data='{"name": "{{ meal.name }}", "num_days": "{{ meal.num_days }}"}'>{{ meal.name }}</option>
     {% endfor %}
   </select>
-  <button type="button" class="btn btn-secondary hidden cancel-edit-day" hx-target="td.day-{{ day.date.isoformat }}"
-    hx-get="{% url 'planner:show_day' date=day.date %}" hidden>Cancel</button>
   <button type="submit" form="update-day-{{ day.date.isoformat }}" class="btn btn-primary hidden"
     hx-post="{% url 'planner:edit_day' date=day.date.isoformat %}" hx-target="td.day-{{ day.date.isoformat }}"
     hidden>Save changes</button>

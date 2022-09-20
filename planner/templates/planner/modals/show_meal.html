@@ -6,54 +6,53 @@
   <div class="modal-body">
     <table class="table">
       <tbody>
-      <tr>
-        <th scope="row" width="1%">Source</th>
-        <td><a href="{{ object.source }}">{{ object.source }}</a></td>
-      </tr>
-      <tr>
-        <th scope="row">Persons</th>
-        <td>{{ object.persons }}</td>
-      </tr>
-      <tr>
-        <th scope="row">Time</th>
-        <td>{{ object.time }}</td>
-      </tr>
-      <tr>
-        <th scope="row">Ingredients</th>
-        <td>{{ object.ingredients|linebreaks }}</td>
-      </tr>
-      <tr>
-        <th scope="row">Steps</th>
-        <td>{{ object.steps|linebreaks }}</td>
-      </tr>
-      <tr>
-        <th scope="row">Categories</th>
-        <td>{{ object.categories_text }}</td>
-      </tr>
-      <tr>
-        <th scope="row">Rating</th>
-        <td>{{ object.rating }}</td>
-      </tr>
-      <tr>
-        <th scope="row">
-          Comments<br>
-          <a class="btn btn-light" href="{% url 'planner:createcomment' pk=object.id %}">
-            <i class="bi bi-chat-left-text"></i>
-          </a>
-        </th>
-        <td>
-          {% for comment in object.comment_set.all %}
-          <div>{{ comment.author }} {{ comment.created_at }}</div>
-          <div>{{ comment.text|linebreaks }}</div>
-          {% endfor %}
-        </td>
-      </tr>
+        <tr>
+          <th scope="row" width="1%">Source</th>
+          <td><a href="{{ object.source }}">{{ object.source }}</a></td>
+        </tr>
+        <tr>
+          <th scope="row">Persons</th>
+          <td>{{ object.persons }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Time</th>
+          <td>{{ object.time }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Ingredients</th>
+          <td>{{ object.ingredients|linebreaks }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Steps</th>
+          <td>{{ object.steps|linebreaks }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Categories</th>
+          <td>{{ object.categories_text }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Rating</th>
+          <td>{{ object.rating }}</td>
+        </tr>
+        <tr>
+          <th scope="row">
+            Comments<br>
+            <a class="btn btn-light" href="{% url 'planner:createcomment' pk=object.id %}">
+              <i class="bi bi-chat-left-text"></i>
+            </a>
+          </th>
+          <td>
+            {% for comment in object.comment_set.all %}
+            <div>{{ comment.author }} {{ comment.created_at }}</div>
+            <div>{{ comment.text|linebreaks }}</div>
+            {% endfor %}
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-    <a id="edit-meal" class="btn btn-primary" hx-get="{% url 'planner:editmeal' pk=meal.pk%}"
-       hx-target=".modal-dialog" href="#">Edit</a>
+    <a id="edit-meal" class="btn btn-primary" hx-get="{% url 'planner:editmeal' pk=meal.pk%}" hx-target=".modal-dialog"
+      href="#">Edit</a>
   </div>
 </div>
