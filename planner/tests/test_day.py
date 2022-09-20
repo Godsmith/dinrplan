@@ -26,7 +26,22 @@ def test_clicking_edit_day_button_shows_input_for_editing_day(live_server, day, 
     assert page.is_visible(".selectize-input")
 
 
-def test_editing_two_days_and_then_pressing_cancel_closes_just_one_edit(
+def test_clicking_edit_day_button_twice_hides_input_for_editing_day_again(
+    live_server, day, page: Page
+):
+    # Arrange
+    date = timezone.now().date().isoformat()
+    page.goto(live_server.url)
+
+    # Act
+    page.click(f"a.day-{date}")
+    page.click(f"a.day-{date}")
+
+    # Assert
+    page.wait_for_selector(".selectize-input", state="hidden")
+
+
+def test_editing_two_days_and_then_pressing_edit_cancels_just_one_edit(
     live_server, day, page: Page
 ):
     # Given a logged in user on the main page
@@ -37,16 +52,17 @@ def test_editing_two_days_and_then_pressing_cancel_closes_just_one_edit(
     page.locator(".edit-day").nth(1).click()
     # Waiting for load state not always working here for some reason, so wait
     # a specific time instaed
+    page.wait_for_selector(".selectize-input")
     page.wait_for_timeout(100)
-    # Then there shall be two cancel buttons visible
-    assert page.locator(".cancel-edit-day").count() == 2
+    # Then there shall be two selectize inputs
+    assert page.locator(".selectize-input").count() == 2
 
-    # When one cancel button is pressed
-    page.locator(".cancel-edit-day").first.click()
+    # When one edit button is pressed
+    page.locator(".edit-day").first.click()
     page.wait_for_timeout(100)
 
     # There is just one cancel button visible
-    assert page.locator(".cancel-edit-day").count() == 1
+    assert page.locator(".selectize-input").count() == 1
 
 
 def test_posting_name_inserts_that_meal_into_the_day(logged_in_client, meal, day):

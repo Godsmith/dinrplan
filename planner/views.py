@@ -153,8 +153,24 @@ class DragView(View):
 
 class EditDayView(View):
     def get(self, request, *args, **kwargs):
+        editing: list = request.session.get("editing", [])
+        date_ = kwargs["date"]
+
+        if date_ in editing:
+            # If we already were changing this day, store that
+            # we are not anymore and return the non-editing day template
+            editing.remove(date_)
+            request.session["editing"] = editing
+            return HttpResponseRedirect(
+                reverse("planner:show_day", kwargs={"date": date_})
+            )
+
+        # Store that we are currently changing this day
+        editing.append(kwargs["date"])
+        request.session["editing"] = editing
+
         day, _ = Day.objects.get_or_create(
-            date=date.fromisoformat(kwargs["date"]), user=request.user
+            date=date.fromisoformat(date_), user=request.user
         )
         todays_meal_names = [meal.name for meal in day.meals.all()]
         database_meals = [
