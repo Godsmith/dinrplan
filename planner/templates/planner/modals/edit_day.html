@@ -6,10 +6,7 @@
     create: true,
     createOnBlur: true,
     openOnFocus: false,
-    onItemAdd: function () {
-      // Close dropdown when choosing a meal
-      this.close();
-    },
+    closeAfterSelect: true,
     // Use the original ordering of the <option> elements, but hide those that do not match at all.
     // Workaround from https://github.com/selectize/selectize.js/issues/218
     score: function (search) {
