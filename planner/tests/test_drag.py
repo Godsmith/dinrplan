@@ -16,5 +16,5 @@ def test_drag(create_meal_for_today_and_tomorrow, live_server, page: Page):
     page.wait_for_load_state("networkidle")
 
     # Then the name of the meals shall be exchanged
-    assert page.text_content(f"td.day-{tomorrow} a") == "Recipe for today"
-    assert page.text_content(f"td.day-{today} a") == "Recipe for tomorrow"
+    assert page.text_content(f"td.day-{tomorrow} a") == "Meal for today"
+    assert page.text_content(f"td.day-{today} a") == "Meal for tomorrow"

@@ -102,8 +102,11 @@ class MealUpdateView(UpdateView):
     success_url = "not used since we override form_valid, but if we don't have this Django throws an exception"
 
     def form_valid(self, form):
-        """Add author to the created Meal object, since it is a mandatory field"""
+        # Add author to the created Meal object, since it is a mandatory field
         form.instance.author = self.request.user
+        # Also set is_recipe to True to show it as blue color and get it to show up in the recipe list
+        form.instance.is_recipe = True
+
         super().form_valid(form)
         # Return the weeks view to htmx, so that the text color updates
         return HttpResponseRedirect(reverse("planner:weeks"))
@@ -159,7 +162,7 @@ class EditDayView(View):
             for meal in Meal.objects.filter(author=request.user)
             .annotate(num_days=Count("day"))
             .order_by("-num_days")
-            if meal.is_created
+            if meal.is_recipe
         ]
         return render(
             request,
@@ -265,6 +268,7 @@ class UploadJsonView(FormView):
                 ingredients=ingredients,
                 steps=steps,
                 rating=rating,
+                is_recipe=True,
             )
 
             for category in categories:
@@ -303,7 +307,7 @@ class RecipesView(View):
         created_meals = [
             meal
             for meal in Meal.objects.filter(author=request.user).order_by("name")
-            if meal.is_created
+            if meal.is_recipe
         ]
         return render(
             request,

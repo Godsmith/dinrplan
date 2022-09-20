@@ -7,7 +7,7 @@ from django.utils import timezone
 def test_todays_recipe_is_not_shown_on_main_page_if_not_logged_in(client, day):
     response = client.get("/")
 
-    assert "Recipe for today" not in str(response.content)
+    assert "Meal for today" not in str(response.content)
 
 
 def test_todays_recipe_is_shown_on_main_page_if_logged_in(client, day):
@@ -15,7 +15,7 @@ def test_todays_recipe_is_shown_on_main_page_if_logged_in(client, day):
 
     response = client.get("/")
 
-    assert "Recipe for today" in str(response.content)
+    assert "Meal for today" in str(response.content)
 
 
 def test_posting_week_offset_and_count_updates_database(client, day):
@@ -38,7 +38,7 @@ def test_posting_week_offset_and_count_updates_database(client, day):
     assert monday_last_week_shown.isoformat() in str(response.content)
     assert str(response.content).count("Monday") == 6
 
-    assert "Recipe for today" in str(response.content)
+    assert "Meal for today" in str(response.content)
 
 
 def test_changing_to_displaying_two_weeks_ago_shows_last_monday(live_server, page):

@@ -40,11 +40,12 @@ def user(client, db):
 
 @pytest.fixture
 def meal(user):
-    return Meal.objects.create(name="Recipe for today", author=user)
+    return Meal.objects.create(name="Meal for today", author=user)
 
 
 @pytest.fixture
 def day(user, meal):
+    # TODO: merge with fixture create_meal_for_today() below?
     day, _ = Day.objects.get_or_create(date=timezone.now().date(), user=user)
     day.meals.add(meal)
     return day
@@ -58,6 +59,18 @@ def logged_in_client(client, user):
 
 @pytest.fixture
 def create_meal_for_today(user):
+    # TODO: merge with fixture day() above?
+    date = timezone.now()
+    day, _ = Day.objects.get_or_create(date=date, user=user)
+    meal = Meal.objects.create(
+        name="Meal for today",
+        author=user,
+    )
+    day.meals.add(meal)
+
+
+@pytest.fixture
+def create_recipe_for_today(user):
     date = timezone.now()
     day, _ = Day.objects.get_or_create(date=date, user=user)
     meal = Meal.objects.create(
@@ -68,6 +81,7 @@ def create_meal_for_today(user):
         time="30 min",
         ingredients="myingredients",
         steps="mysteps",
+        is_recipe=True,
     )
     day.meals.add(meal)
 
@@ -77,7 +91,7 @@ def create_meal_for_today_and_tomorrow(create_meal_for_today, user):
     date = timezone.now() + timezone.timedelta(days=1)
     day, _ = Day.objects.get_or_create(date=date, user=user)
     meal = Meal.objects.create(
-        name="Recipe for tomorrow",
+        name="Meal for tomorrow",
         author=user,
         source="mysource",
         persons=8,

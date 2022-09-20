@@ -13,6 +13,11 @@ class Category(models.Model):
 
 
 class Meal(models.Model):
+    """Something that can be cooked and eaten on one or more days.
+
+    A meal is not a recipe to start with; only when it has been submitted through the edit form
+    it becomes a recipe and shows up in the recipe list."""
+
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     source = models.CharField(max_length=200, blank=True)
@@ -25,14 +30,11 @@ class Meal(models.Model):
     rating = models.PositiveSmallIntegerField(
         default=0, validators=[MaxValueValidator(5)]
     )
+    # is_recipe is True if the meal shall be shown in blue color and in the recipe list.
+    is_recipe = models.BooleanField(default=False)
     categories = models.ManyToManyField(Category, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    @property
-    def is_created(self) -> bool:
-        """A meal is considered created when it has ingredients"""
-        return bool(self.ingredients or self.source)
 
     @property
     def categories_text(self) -> str:
