@@ -1,6 +1,6 @@
 # dinrplan
 
-Meal planner/recipe database built with Python, Django and PostgreSQL
+Meal planner/recipe database built with Python, Django and htmx. Deployed on [dinrplan.fly.dev](dinrplan.fly.dev).
 
 [![Tests](https://github.com/Godsmith/dinrplan/actions/workflows/tests.yml/badge.svg)](https://github.com/Godsmith/dinrplan/actions/workflows/tests.yml)
 [![Black](https://github.com/Godsmith/dinrplan/actions/workflows/black.yml/badge.svg)](https://github.com/Godsmith/dinrplan/actions/workflows/black.yml)
@@ -11,7 +11,6 @@ Meal planner/recipe database built with Python, Django and PostgreSQL
 - Python 3.9+
 - PostgreSQL
 - hatch
-- Heroku CLI
 
 ## Setting up the development environment
 
