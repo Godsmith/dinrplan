@@ -15,7 +15,9 @@
   </div>
   <div class="modal-body">
     <form id="update-meal" hx-post="{% url 'planner:editmeal' pk=object.pk %}" hx-target="#weeks">{% csrf_token %}
-      {{ form.as_p }}
+      <table class="table">
+        {{ form.as_table }}
+      </table>
     </form>
   </div>
   <div class="modal-footer">
