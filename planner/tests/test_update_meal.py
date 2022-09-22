@@ -33,9 +33,8 @@ def test_create_empty_meal(live_server, day, page: Page):
     page.goto(live_server.url)
     page.click(".does-not-exist")
     page.click('button[form="update-meal"]')
-    page.wait_for_selector('button[form="update-meal"]', state="hidden")
 
-    assert page.is_visible(".exists")
+    page.wait_for_selector(".exists", state="visible")
 
 
 def test_clicking_meal_that_does_not_exist_opens_edit_dialog(live_server, day, page):
