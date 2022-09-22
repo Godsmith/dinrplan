@@ -1,36 +1,33 @@
 {% extends 'base.html' %}
 
 
-{% block head %}
-  {% load static %}
-  <link rel="stylesheet" type="text/css" href="{% static 'planner/index.css' %}">
-{% endblock %}
 
 {% block content %}
-  <div class="container-fluid">
-    <form class="d-flex" hx-post="{% url 'planner:update_weeks' %}" hx-target="#weeks" hx-swap="outerHTML" hx-trigger="change">
-      {% csrf_token %}
-      <div class="p-2 m-2">Weeks back:</div>
-      <select class="p-2 me-2 mt-2 mb-2" name="first-week-offset">
-        {% for first_week_offset in first_week_offsets %}
-          {% if user.first_week_offset == first_week_offset %}
-            <option value="{{ first_week_offset }}" selected>{{ first_week_offset}}</option>
-          {% else %}
-            <option value="{{ first_week_offset }}">{{ first_week_offset}}</option>
-          {% endif %}
-        {% endfor %}
-      </select>
-      <div class="p-2 me-2 mt-2 mb-2">Weeks to display:</div>
-      <select class="p-2 me-4 mt-2 mb-2" name="number-of-weeks-to-show">
-        {% for week_count in numbers_of_weeks_to_show %}
-          {% if user.number_of_weeks_to_show == week_count %}
-            <option value="{{ week_count }}" selected>{{ week_count}}</option>
-          {% else %}
-            <option value="{{ week_count }}">{{ week_count}}</option>
-          {% endif %}
-        {% endfor %}
-      </select>
-    </form>
-    {% include 'planner/weeks.html' %}
-  </div>
+<div class="container-fluid">
+  <form class="d-flex" hx-post="{% url 'planner:update_weeks' %}" hx-target="#weeks" hx-swap="outerHTML"
+    hx-trigger="change">
+    {% csrf_token %}
+    <div class="p-2 m-2">Weeks back:</div>
+    <select class="p-2 me-2 mt-2 mb-2" name="first-week-offset">
+      {% for first_week_offset in first_week_offsets %}
+      {% if user.first_week_offset == first_week_offset %}
+      <option value="{{ first_week_offset }}" selected>{{ first_week_offset}}</option>
+      {% else %}
+      <option value="{{ first_week_offset }}">{{ first_week_offset}}</option>
+      {% endif %}
+      {% endfor %}
+    </select>
+    <div class="p-2 me-2 mt-2 mb-2">Weeks to display:</div>
+    <select class="p-2 me-4 mt-2 mb-2" name="number-of-weeks-to-show">
+      {% for week_count in numbers_of_weeks_to_show %}
+      {% if user.number_of_weeks_to_show == week_count %}
+      <option value="{{ week_count }}" selected>{{ week_count}}</option>
+      {% else %}
+      <option value="{{ week_count }}">{{ week_count}}</option>
+      {% endif %}
+      {% endfor %}
+    </select>
+  </form>
+  {% include 'planner/weeks.html' %}
+</div>
 {% endblock %}

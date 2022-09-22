@@ -1,3 +1,23 @@
+@font-face {
+    font-family: 'Comfortaa';
+    src: local('Comfortaa'), url("/static/planner/Comfortaa-Regular.ttf") format("truetype");
+}
+
+.navbar-brand {
+    font-family: "Comfortaa"
+}
+
+.navbar-nav {
+    font-family: "Comfortaa"
+}
+
+a {
+    text-decoration: none;
+}
+
+a.exists {
+    color: #0645ad;
+}
 
 a.does-not-exist {
     color: #ba0000;
