@@ -29,7 +29,10 @@ NUMBER_OF_WEEKS_TO_SHOW_OPTIONS = [1, 2, 3, 6]
 DEFAULT_NUMBER_OF_WEEKS_TO_SHOW = 3
 
 
-def _get_weeks(request):
+def _get_weeks_and_reset_editing_status(request):
+    # When (re)loading the page, reset the editing status of all days so that
+    # clicking the edit button opens the edit view for those days again.
+    request.session["editing"] = []
     first_week_offset = (
         request.user.first_week_offset
         if request.user.is_authenticated
@@ -63,7 +66,7 @@ def index(request):
         request,
         "planner/index.html",
         {
-            "weeks": _get_weeks(request),
+            "weeks": _get_weeks_and_reset_editing_status(request),
             "first_week_offsets": FIRST_WEEK_OFFSET_OPTIONS,
             "numbers_of_weeks_to_show": NUMBER_OF_WEEKS_TO_SHOW_OPTIONS,
         },
@@ -83,7 +86,11 @@ class UpdateDisplayedWeeksView(View):
 
 class WeeksView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, "planner/weeks.html", {"weeks": _get_weeks(request)})
+        return render(
+            request,
+            "planner/weeks.html",
+            {"weeks": _get_weeks_and_reset_editing_status(request)},
+        )
 
 
 class MealUpdateView(UpdateView):
