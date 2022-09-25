@@ -1,5 +1,6 @@
-<div style="height: 100%" {% if not day.meals.all %} hx-get="{% url 'planner:edit_day' date=day.date.isoformat %}"
-  hx-trigger="click" hx-target="td.day-{{ day.date.isoformat }}" {% endif %}>
+<div class="day-{{ day.date.isoformat }}" style="height: 100%" {% if not day.meals.all %}
+  hx-get="{% url 'planner:edit_day' date=day.date.isoformat %}" hx-trigger="click"
+  hx-target="td.day-{{ day.date.isoformat }}" {% endif %}>
   {% for meal in day.meals.all %}
   {% if meal.is_recipe %}
   <a class="exists" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"

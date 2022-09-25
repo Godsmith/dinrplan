@@ -26,6 +26,33 @@ def test_clicking_edit_day_button_shows_input_for_editing_day(live_server, day, 
     assert page.is_visible(".selectize-input")
 
 
+def test_clicking_empty_day_shows_input_for_editing_day(live_server, day, page: Page):
+    # Arrange
+    tomorrow = timezone.now().date().isoformat()
+    page.goto(live_server.url)
+
+    # Act
+    page.click(f"div.day-{tomorrow}")
+
+    # Assert
+    assert page.wait_for_selector(".selectize-input", state="visible")
+
+
+def test_clicking_day_with_meal_does_not_show_input_for_editing_day(
+    live_server, day, page: Page
+):
+    # Arrange
+    today = (timezone.now().date() + timezone.timedelta(days=1)).isoformat()
+    page.goto(live_server.url)
+
+    # Act
+    page.click(f"div.day-{today}")
+    page.wait_for_load_state("networkidle")
+
+    # Assert
+    assert page.is_hidden(".selectize-input")
+
+
 def test_clicking_edit_day_button_twice_hides_input_for_editing_day_again(
     live_server, day, page: Page
 ):
