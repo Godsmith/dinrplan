@@ -28,7 +28,7 @@ def test_clicking_edit_day_button_shows_input_for_editing_day(live_server, day, 
 
 def test_clicking_empty_day_shows_input_for_editing_day(live_server, day, page: Page):
     # Arrange
-    tomorrow = timezone.now().date().isoformat()
+    tomorrow = (timezone.now().date() + timezone.timedelta(days=1)).isoformat()
     page.goto(live_server.url)
 
     # Act
@@ -42,7 +42,7 @@ def test_clicking_day_with_meal_does_not_show_input_for_editing_day(
     live_server, day, page: Page
 ):
     # Arrange
-    today = (timezone.now().date() + timezone.timedelta(days=1)).isoformat()
+    today = timezone.now().date().isoformat()
     page.goto(live_server.url)
 
     # Act
