@@ -15,8 +15,8 @@ class Category(models.Model):
 class Meal(models.Model):
     """Something that can be cooked and eaten on one or more days.
 
-    A meal is not a recipe to start with; only when it has been submitted through the edit form
-    it becomes a recipe and shows up in the recipe list."""
+    A meal is not a recipe to start with; only when it has been submitted through the
+    edit form it becomes a recipe and shows up in the recipe list."""
 
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)

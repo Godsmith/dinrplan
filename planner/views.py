@@ -1,7 +1,6 @@
 import json
 from datetime import date
 from datetime import timedelta
-from typing import List
 
 from django.db.models import Count
 from django.http import HttpResponse
@@ -106,12 +105,14 @@ class MealUpdateView(UpdateView):
         "categories",
         "rating",
     ]
-    success_url = "not used since we override form_valid, but if we don't have this Django throws an exception"
+    success_url = "not used since we override form_valid, "
+    "but if we don't have this Django throws an exception"
 
     def form_valid(self, form):
         # Add author to the created Meal object, since it is a mandatory field
         form.instance.author = self.request.user
-        # Also set is_recipe to True to show it as blue color and get it to show up in the recipe list
+        # Also set is_recipe to True to show it as blue color and get it to show up in
+        # the recipe list
         form.instance.is_recipe = True
 
         super().form_valid(form)
@@ -135,11 +136,13 @@ class MealDeleteView(View):
 
 
 class DragView(View):
-    """Called when dragging from or dropping on a day, when you want to move a set of meals from one day to another."""
+    """Called when dragging from or dropping on a day, when you want to move a set of
+    meals from one day to another."""
 
     def post(self, request, *args, **kwargs):
         """When dragging from a day, store that date in a variable.
-        When dropping on a day, exchange the meals of the source day and the target day."""
+        When dropping on a day, exchange the meals of the source day and the target day.
+        """
         event_type = json.loads(request.headers["Triggering-Event"])["type"]
         if event_type == "dragstart":
             request.session["date_dragged_from"] = kwargs["date"]
@@ -201,7 +204,8 @@ class EditDayView(View):
         meal_names = request.POST.getlist("select")  # type: List[str]
         meals = []
         for meal_name in meal_names:
-            # Raises MultipleObjectsReturned if the user has managed to create multiple meals in some way
+            # Raises MultipleObjectsReturned if the user has managed to create multiple
+            # meals in some way
             meal, _ = Meal.objects.get_or_create(author=request.user, name=meal_name)
             meals.append(meal)
         iso_date = date.fromisoformat(kwargs["date"])

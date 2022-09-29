@@ -1,13 +1,11 @@
 import pytest
-from django.utils import timezone
 from playwright.sync_api import Page
 
 
 @pytest.fixture
 def visible_comment_form(live_server, create_recipe_for_today, page: Page):
-    today = timezone.now().date().isoformat()
     page.goto(live_server.url)
-    page.click(f"a.exists")
+    page.click("a.exists")
     page.click("a.comment-show")
     page.wait_for_selector("button.comment-submit")
 

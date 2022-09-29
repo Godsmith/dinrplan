@@ -68,11 +68,12 @@ def test_clicking_edit_day_button_twice_hides_input_for_editing_day_again(
     page.wait_for_selector(".selectize-input", state="hidden")
 
 
-def test_clicking_edit_day_button_reloading_the_page_and_then_clicking_again_shows_input(
+def test_clicking_edit_day_button_reloading_the_page_and_clicking_again_shows_input(
     live_server, day, page: Page
 ):
-    """Previously, the edit state of a day was preserved in the session when reloading the page even though
-    the edit button was hidden, creating a discrepancy between what was shown and what was stored.
+    """Previously, the edit state of a day was preserved in the session when reloading
+    the page even though the edit button was hidden, creating a discrepancy between what
+    was shown and what was stored.
     """
     # Arrange
     date = timezone.now().date().isoformat()

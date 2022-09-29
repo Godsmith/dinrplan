@@ -1,8 +1,3 @@
-import pytest
-
-from planner.models import Meal
-
-
 def test_modal_is_hidden_by_default(live_server, page, create_recipe_for_today):
     # Arrange
     page.goto(live_server.url + "/recipes")

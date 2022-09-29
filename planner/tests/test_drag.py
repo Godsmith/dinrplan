@@ -3,7 +3,8 @@ from playwright.sync_api import Page
 
 
 def test_drag(create_meal_for_today_and_tomorrow, live_server, page: Page):
-    """When dragging one day on top of another, the planned meals for the days shall switch."""
+    """When dragging one day on top of another, the planned meals for the days shall
+    switch."""
     today = timezone.now().date().isoformat()
     tomorrow = (timezone.now().date() + timezone.timedelta(days=1)).isoformat()
 
