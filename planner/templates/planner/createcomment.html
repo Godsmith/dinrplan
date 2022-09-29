@@ -1,8 +1,5 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<form method="post">{% csrf_token %}
+<form method="post" class="comment">{% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Save">
+    <button class="btn btn-primary comment-submit" hx-post="{% url 'planner:create_comment' pk=view.kwargs.pk %}"
+        hx-target=".modal-dialog">Submit</button>
 </form>
-{% endblock %}

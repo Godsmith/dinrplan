@@ -36,7 +36,7 @@ def test_shows_all_properties(client, meal_with_all_attributes):
 
 def test_posting_comment_shows_that_comment(client, meal_with_all_attributes):
     client.post(
-        reverse("planner:createcomment", kwargs={"pk": meal_with_all_attributes.pk}),
+        reverse("planner:create_comment", kwargs={"pk": meal_with_all_attributes.pk}),
         data={"text": "My comment text"},
     )
     response = client.get(

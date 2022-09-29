@@ -36,23 +36,25 @@
         </tr>
         <tr>
           <th scope="row">
-            Comments<br>
-            <a class="btn btn-light" href="{% url 'planner:createcomment' pk=object.id %}">
-              <i class="bi bi-chat-left-text"></i>
-            </a>
+            Comments
           </th>
           <td>
             {% for comment in object.comment_set.all %}
             <div>{{ comment.author }} {{ comment.created_at }}</div>
-            <div>{{ comment.text|linebreaks }}</div>
+            <div class="comment-text">{{ comment.text|linebreaks }}</div>
             {% endfor %}
+            <div class="create-comment">
+              <a class="btn btn-light comment-show" hx-get="{% url 'planner:create_comment' pk=meal.pk %}">
+                <i class="bi bi-chat-left-text"></i>
+              </a>
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
   <div class="modal-footer">
-    <a id="edit-meal" class="btn btn-primary" hx-get="{% url 'planner:editmeal' pk=meal.pk%}" hx-target=".modal-dialog"
+    <a id="edit-meal" class="btn btn-primary" hx-get="{% url 'planner:editmeal' pk=meal.pk %}" hx-target=".modal-dialog"
       href="#">Edit</a>
   </div>
 </div>

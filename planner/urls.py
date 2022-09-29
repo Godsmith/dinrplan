@@ -13,7 +13,7 @@ urlpatterns = [
     path(
         "meal/comment/<slug:pk>",
         views.CommentCreateView.as_view(),
-        name="createcomment",
+        name="create_comment",
     ),
     path("upload", views.UploadJsonView.as_view(), name="upload"),
     path("update_weeks", views.UpdateDisplayedWeeksView.as_view(), name="update_weeks"),
