@@ -201,7 +201,7 @@ class EditDayView(View):
         )
 
     def post(self, request, *args, **kwargs):
-        meal_names = request.POST.getlist("select")  # type: List[str]
+        meal_names = request.POST.getlist("select")  # type: list[str]
         meals = []
         for meal_name in meal_names:
             # Raises MultipleObjectsReturned if the user has managed to create multiple
