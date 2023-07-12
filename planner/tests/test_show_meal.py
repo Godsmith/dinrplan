@@ -7,7 +7,7 @@ from planner.models import Meal
 @pytest.fixture
 def meal_with_all_attributes(client, user, day):
     client.login(username="user1", password="user1")
-    meal = Meal.objects.create(
+    return Meal.objects.create(
         name="My recipe",
         author=user,
         source="mysource",
@@ -16,7 +16,6 @@ def meal_with_all_attributes(client, user, day):
         ingredients="myingredients",
         steps="mysteps",
     )
-    return meal
 
 
 def test_shows_all_properties(client, meal_with_all_attributes):

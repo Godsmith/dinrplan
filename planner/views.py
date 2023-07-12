@@ -319,8 +319,7 @@ class UploadJsonView(FormView):
                 continue
             day, _ = Day.objects.get_or_create(date=date_, user=self.request.user)
             day.meals.clear()
-            meal_names_string = day_dict["meal"]
-            if meal_names_string:
+            if meal_names_string := day_dict["meal"]:
                 meal_names = meal_names_string.split(";")
                 for meal_name in meal_names:
                     meal, _ = Meal.objects.get_or_create(
