@@ -15,14 +15,6 @@ a {
     text-decoration: none;
 }
 
-a.exists {
-    color: #0645ad;
-}
-
-a.does-not-exist {
-    color: #ba0000;
-}
-
 /* By default, toggled btn-light do not change color. Fix so that they change
 colors to those of a btn-secondary. */
 .btn-light[aria-pressed="true"] {

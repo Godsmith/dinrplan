@@ -4,37 +4,37 @@ from planner.models import Category
 from planner.models import Meal
 
 
-def test_meal_has_class_does_not_exist(logged_in_client, create_meal_for_today):
+def test_meal_has_class_text_danger(logged_in_client, create_meal_for_today):
     response = logged_in_client.get("/")
 
-    assert "does-not-exist" in str(response.content)
-    assert "exists" not in str(response.content)
+    assert "text-danger" in str(response.content)
+    assert "text-primary" not in str(response.content)
 
 
-def test_recipe_has_class_exists(logged_in_client, create_recipe_for_today):
+def test_recipe_has_class_text_primary(logged_in_client, create_recipe_for_today):
     response = logged_in_client.get("/")
 
-    assert "exists" in str(response.content)
-    assert "does-not-exist" not in str(response.content)
+    assert "text-primary" in str(response.content)
+    assert "text-danger" not in str(response.content)
 
 
 def test_editing_and_pressing_ok_to_meal_makes_that_meal_exist(
     live_server, day, page: Page
 ):
     page.goto(live_server.url)
-    page.click(".does-not-exist")
+    page.click(".text-danger")
     page.click('button[form="update-meal"]')
-    page.wait_for_selector(".does-not-exist", state="hidden")
+    page.wait_for_selector(".text-danger", state="hidden")
 
-    assert page.is_visible(".exists")
+    assert page.is_visible(".text-primary")
 
 
 def test_create_empty_meal(live_server, day, page: Page):
     page.goto(live_server.url)
-    page.click(".does-not-exist")
+    page.click(".text-danger")
     page.click('button[form="update-meal"]')
 
-    page.wait_for_selector(".exists", state="visible")
+    page.wait_for_selector(".text-primary", state="visible")
 
 
 def test_clicking_meal_that_does_not_exist_opens_edit_dialog(live_server, day, page):
@@ -42,7 +42,7 @@ def test_clicking_meal_that_does_not_exist_opens_edit_dialog(live_server, day, p
 
     assert not page.is_visible("input.name")
 
-    page.click(".does-not-exist")
+    page.click(".text-danger")
 
     # TODO: is this correct? Should there be a "not" here?
     assert not page.is_visible("input.name")
@@ -56,7 +56,7 @@ def test_clicking_meal_that_exists_opens_show_dialog(live_server, day, user, pag
     assert not page.is_visible("input.name")
 
     # Act
-    page.click(".exists")
+    page.click(".text-primary")
 
     # Assert
     page.wait_for_load_state("networkidle")
@@ -69,7 +69,7 @@ def test_add_category_to_meal(live_server, day, user, page: Page):
     # Arrange
     Category.objects.create(name="Vegetariskt")
     page.goto(live_server.url)
-    page.click(".does-not-exist")
+    page.click(".text-danger")
 
     # Act
     page.click(".selectize-input")

@@ -19,7 +19,7 @@ def test_clicking_edit_day_button_shows_input_for_editing_day(live_server, day, 
     page.goto(live_server.url)
 
     # Act
-    page.click(f"a.day-{date}")
+    page.click(f"button.day-{date}")
     page.wait_for_load_state("networkidle")
 
     # Assert
@@ -61,8 +61,8 @@ def test_clicking_edit_day_button_twice_hides_input_for_editing_day_again(
     page.goto(live_server.url)
 
     # Act
-    page.click(f"a.day-{date}")
-    page.click(f"a.day-{date}")
+    page.click(f"button.day-{date}")
+    page.click(f"button.day-{date}")
 
     # Assert
     page.wait_for_selector(".selectize-input", state="hidden")
@@ -80,9 +80,9 @@ def test_clicking_edit_day_button_reloading_the_page_and_clicking_again_shows_in
     page.goto(live_server.url)
 
     # Act
-    page.click(f"a.day-{date}")
+    page.click(f"button.day-{date}")
     page.goto(live_server.url)
-    page.click(f"a.day-{date}")
+    page.click(f"button.day-{date}")
     page.wait_for_load_state("networkidle")
 
     # Assert

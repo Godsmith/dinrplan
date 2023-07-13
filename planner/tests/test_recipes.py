@@ -13,7 +13,7 @@ def test_clicking_recipe_opens_modal(live_server, page, create_recipe_for_today)
     page.goto(live_server.url + "/recipes")
 
     # Act
-    page.click(".exists")
+    page.click(".text-primary")
     page.click("#edit-meal")
     page.click("button[form='update-meal']")
 
@@ -28,7 +28,7 @@ def test_submitting_edited_recipe_returns_to_recipes_page(
     page.goto(live_server.url + "/recipes")
 
     # Act
-    page.click(".exists")
+    page.click(".text-primary")
     page.wait_for_load_state("networkidle")
 
     # Assert
