@@ -14,11 +14,3 @@
 a {
     text-decoration: none;
 }
-
-/* By default, toggled btn-light do not change color. Fix so that they change
-colors to those of a btn-secondary. */
-.btn-light[aria-pressed="true"] {
-    color: #fff;
-    background-color: #6c757d;
-    border-color: #6c757d;
-}

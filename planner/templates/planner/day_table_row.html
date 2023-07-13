@@ -11,7 +11,7 @@
     {% include 'planner/modals/show_day.html' with day=day %}
   </td>
   <td class="align-middle" style="width:1%">
-    <button class="btn btn-light day-{{ day.date.isoformat }} edit-day"
+    <button class="btn btn-outline-secondary day-{{ day.date.isoformat }} edit-day"
       hx-get="{% url 'planner:edit_day' date=day.date.isoformat %}" hx-target="td.day-{{ day.date.isoformat }}"
       data-bs-toggle="button" aria-pressed="false"><i class="bi bi-pencil"></i></button>
   </td>
