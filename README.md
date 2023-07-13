@@ -73,7 +73,7 @@ hatch run pytest
 ## Running development server
 
 ```
-hatch run python manage.py runserver
+hatch run server
 ```
 
 ## Running tests
