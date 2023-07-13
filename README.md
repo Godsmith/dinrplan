@@ -96,12 +96,4 @@ to force re-creation of the test database.
 git push
 ```
 
-Heroku is set to deploy when the Github Actions pass.
-
-## Miscellanous
-
-### Starting a shell on heroku
-
-```commandline
-heroku run bash
-```
+The project is automatically deployed to dinrplan.fly.dev when the Github Actions pass.
