@@ -14,3 +14,35 @@
 a {
     text-decoration: none;
 }
+
+/* Selectize dark mode */
+html[data-bs-theme="dark"] div.selectize-input {
+    background-color: field;
+    border-color: rgb(133, 133, 133);
+}
+
+html[data-bs-theme="dark"] div.selectize-input input {
+    color: fieldtext;
+}
+
+
+html[data-bs-theme="dark"] div.selectize-input div.item {
+    background: #212529 !important;
+    color: fieldtext !important;
+}
+
+html[data-bs-theme="dark"] div.selectize-dropdown {
+    border-color: #212529;
+}
+
+html[data-bs-theme="dark"] div.selectize-dropdown-content {
+    background-color: #212529;
+}
+
+html[data-bs-theme="dark"] div.selectize-dropdown-content div {
+    color: fieldtext !important;
+}
+
+html[data-bs-theme="dark"] div.selectize-dropdown-content div.active {
+    background-color: #2b3035;
+}
