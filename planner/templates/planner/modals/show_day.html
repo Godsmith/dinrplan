@@ -3,10 +3,10 @@
   hx-target="td.day-{{ day.date.isoformat }}" {% endif %}>
   {% for meal in day.meals.all %}
   {% if meal.is_recipe %}
-  <a class="text-primary" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
+  <a class="text-primary" href="#" data-bs-toggle="modal" data-bs-target="#mealModal"
     hx-get="{% url 'planner:showmeal' pk=meal.pk%}" hx-target=".modal-dialog">{{ meal.name }}</a>
   {% else %}
-  <a class="text-danger" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
+  <a class="text-danger" href="#" data-bs-toggle="modal" data-bs-target="#mealModal"
     hx-get="{% url 'planner:editmeal' pk=meal.pk%}" hx-target=".modal-dialog">{{ meal.name }}</a>
   {% endif %}
   {% endfor %}

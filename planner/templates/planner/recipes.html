@@ -23,7 +23,7 @@
       {% for meal in meals %}
       <tr>
         <td>
-          <a class="text-primary" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
+          <a class="text-primary" href="#" data-bs-toggle="modal" data-bs-target="#mealModal"
             hx-get="{% url 'planner:showmeal' pk=meal.pk%}" hx-target=".modal-dialog">{{ meal.name }}</a>
         </td>
         <td>
