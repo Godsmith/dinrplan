@@ -15,6 +15,11 @@ a {
     text-decoration: none;
 }
 
+/* Prevent long URLs in source field breaking layout */
+#mealModal td {
+    word-break: break-word;
+}
+
 /* Selectize dark mode */
 html[data-bs-theme="dark"] div.selectize-input {
     background-color: field;
