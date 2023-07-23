@@ -45,6 +45,11 @@ DATABASES = {
 
 ALLOWED_HOSTS = ["0.0.0.0", ".localhost", "127.0.0.1", "[::1]", "dinrplan.fly.dev"]
 
+# Needed to avoid CSRF verification failed in Django 4.x
+# See https://docs.djangoproject.com/en/4.0/ref/settings/#secure-proxy-ssl-header
+# and https://stackoverflow.com/a/71482883/584503
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 # Application definition
 
 INSTALLED_APPS = [
