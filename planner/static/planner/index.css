@@ -51,3 +51,11 @@ html[data-bs-theme="dark"] div.selectize-dropdown-content div {
 html[data-bs-theme="dark"] div.selectize-dropdown-content div.active {
     background-color: #2b3035;
 }
+
+/* Better table background color for rows that are active or hovered on in
+Bootstrap dark theme, from .dark-table */
+
+html[data-bs-theme="dark"] .table {
+    --bs-table-active-bg: #373b3e;
+    --bs-table-hover-bg: #323539;
+}

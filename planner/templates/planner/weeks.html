@@ -1,7 +1,7 @@
 <div id="weeks" class="row">
   {% for week in weeks %}
   <div class="col-xl-4 col-md-6 col-sm-12">
-    <table class="table table-bordered">
+    <table class="table table-hover">
       <tbody>
         {% for day in week %}
         {% include 'planner/day_table_row.html' with day=day %}
