@@ -13,6 +13,8 @@
         <th>
           Name
         </th>
+        <th>Categories</th>
+        <th>Rating</th>
         <th>
           <button id="delete-selected" type="submit" class="btn btn-danger"
             onclick="return confirm('Are you sure you want to delete the selected recipes?');">Delete selected</button>
@@ -27,6 +29,12 @@
           <a class="text-primary" href="#" data-bs-toggle="modal" data-bs-target="#mealModal"
             hx-get="{% url 'planner:showmeal' pk=meal.pk%}" hx-target=".modal-dialog">{{ meal.name }}</a>
         </td>
+        <td>
+          {% for category in meal.categories.all %}
+          {{ category.name }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </td>
+        <td>{{ meal.rating }}</td>
         <td>
           <input class="form-check-input" type="checkbox" name="delete-meal-{{ meal.pk }}">
         </td>
