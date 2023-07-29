@@ -69,10 +69,8 @@ def create_meal_for_today(user):
 
 
 @pytest.fixture
-def create_recipe_for_today(user):
-    date = timezone.now()
-    day, _ = Day.objects.get_or_create(date=date, user=user)
-    meal = Meal.objects.create(
+def recipe(user):
+    return Meal.objects.create(
         name="Recipe for today",
         author=user,
         source="mysource",
@@ -82,7 +80,13 @@ def create_recipe_for_today(user):
         steps="mysteps",
         is_recipe=True,
     )
-    day.meals.add(meal)
+
+
+@pytest.fixture
+def create_recipe_for_today(user, recipe):
+    date = timezone.now()
+    day, _ = Day.objects.get_or_create(date=date, user=user)
+    day.meals.add(recipe)
 
 
 @pytest.fixture

@@ -17,6 +17,7 @@
           <button id="delete-selected" type="submit" class="btn btn-danger"
             onclick="return confirm('Are you sure you want to delete the selected recipes?');">Delete selected</button>
         </th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -28,6 +29,22 @@
         </td>
         <td>
           <input class="form-check-input" type="checkbox" name="delete-meal-{{ meal.pk }}">
+        </td>
+        <td>
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle recipe" type="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Add to day
+            </button>
+            <ul class="dropdown-menu">
+              {% for date in dates %}
+              <li><a class="dropdown-item recipe" href="#"
+                  hx-post="{% url 'planner:add_meal_to_day' date=date.isoformat meal_pk=meal.pk %}">
+                  {{ date.isoformat }}</a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
         </td>
       </tr>
       {% endfor %}

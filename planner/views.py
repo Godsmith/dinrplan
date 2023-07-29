@@ -215,6 +215,15 @@ class EditDayView(View):
         return redirect("planner:show_day", date=iso_date)
 
 
+class AddMealToDayView(View):
+    def post(self, request, *args, **kwargs):
+        meal = get_object_or_404(Meal, author=request.user, pk=kwargs["meal_pk"])
+        iso_date = date.fromisoformat(kwargs["date"])
+        day, _ = Day.objects.get_or_create(date=iso_date, user=request.user)
+        day.meals.add(meal)
+        return HttpResponse(status=200)
+
+
 class ShowDayView(View):
     def get(self, request, *args, **kwargs):
         day, _ = Day.objects.get_or_create(
@@ -335,8 +344,9 @@ class RecipesView(View):
             for meal in Meal.objects.filter(author=request.user).order_by("name")
             if meal.is_recipe
         ]
+        next_two_weeks = [date.today() + timedelta(days=i) for i in range(1, 15)]
         return render(
             request,
             "planner/recipes.html",
-            {"meals": created_meals},
+            {"meals": created_meals, "dates": next_two_weeks},
         )

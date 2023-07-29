@@ -68,3 +68,28 @@ def test_deleting_meal_removes_it_from_list(live_server, page, create_recipe_for
 
     # Assert
     assert "Recipe for today" not in page.content()
+
+
+class TestAddMeal:
+    def test_show_14_days(self, live_server, page, recipe):
+        # Arrange
+        page.goto(f"{live_server.url}/recipes")
+
+        # Act
+        page.click(".dropdown-toggle.recipe")
+
+        # Assert
+        assert page.locator(".dropdown-item.recipe").count() == 14
+
+    def test_add_meal_to_day(self, live_server, page, recipe):
+        # Arrange
+        page.goto(f"{live_server.url}/recipes")
+
+        # Act
+        # Add the first recipe to the first available day (tomorrow)
+        page.click(".dropdown-toggle.recipe")
+        page.click(".dropdown-item.recipe")
+
+        # Assert
+        page.goto(live_server.url)
+        assert "Recipe for today" in page.content()

@@ -7,6 +7,11 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("day/edit/<date>", views.EditDayView.as_view(), name="edit_day"),
     path("day/show/<date>", views.ShowDayView.as_view(), name="show_day"),
+    path(
+        "day/addmeal/<date>/meal_pk/<meal_pk>",
+        views.AddMealToDayView.as_view(),
+        name="add_meal_to_day",
+    ),
     path("meal/edit/<slug:pk>", views.MealUpdateView.as_view(), name="editmeal"),
     path("meal/show/<slug:pk>", views.MealDetailView.as_view(), name="showmeal"),
     path("meal/delete", views.MealDeleteView.as_view(), name="delete_meal"),
