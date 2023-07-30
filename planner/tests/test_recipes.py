@@ -59,12 +59,12 @@ def test_recipes_are_visible_on_recipes_page(logged_in_client, create_recipe_for
 
 def test_deleting_meal_removes_it_from_list(live_server, page, create_recipe_for_today):
     # Arrange
-    page.goto(live_server.url + "/recipes")
-    page.check("input[type='checkbox']")
+    page.goto(f"{live_server.url}/recipes")
     page.on("dialog", lambda dialog: dialog.accept())
 
     # Act
-    page.click("#delete-selected")
+    page.click("button.recipe")
+    page.click(".dropdown-item.delete")
 
     # Assert
     assert "Recipe for today" not in page.content()
@@ -76,10 +76,11 @@ class TestAddMeal:
         page.goto(f"{live_server.url}/recipes")
 
         # Act
-        page.click(".dropdown-toggle.recipe")
+        page.click("button.recipe")
+        page.click(".dropdown-item.add-to-day")
 
         # Assert
-        assert page.locator(".dropdown-item.recipe").count() == 14
+        assert page.locator(".dropdown-item.add-meal").count() == 14
 
     def test_add_meal_to_day(self, live_server, page, recipe):
         # Arrange
@@ -87,8 +88,9 @@ class TestAddMeal:
 
         # Act
         # Add the first recipe to the first available day (tomorrow)
-        page.click(".dropdown-toggle.recipe")
-        page.click(".dropdown-item.recipe")
+        page.click("button.recipe")
+        page.click(".dropdown-item.add-to-day")
+        page.click(".dropdown-item.add-meal")
 
         # Assert
         page.goto(live_server.url)

@@ -5,58 +5,66 @@
 {% endblock %}
 
 {% block content %}
-<form class="container" action="{% url 'planner:delete_meal' %}" method='post'>
-  {% csrf_token %}
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>
-          Name
-        </th>
-        <th>Categories</th>
-        <th>Rating</th>
-        <th>
-          <button id="delete-selected" type="submit" class="btn btn-danger"
-            onclick="return confirm('Are you sure you want to delete the selected recipes?');">Delete selected</button>
-        </th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for meal in meals %}
-      <tr>
-        <td>
-          <a class="text-primary" href="#" data-bs-toggle="modal" data-bs-target="#mealModal"
-            hx-get="{% url 'planner:showmeal' pk=meal.pk%}" hx-target=".modal-dialog">{{ meal.name }}</a>
-        </td>
-        <td>
-          {% for category in meal.categories.all %}
-          {{ category.name }}{% if not forloop.last %}, {% endif %}
-          {% endfor %}
-        </td>
-        <td>{{ meal.rating }}</td>
-        <td>
-          <input class="form-check-input" type="checkbox" name="delete-meal-{{ meal.pk }}">
-        </td>
-        <td>
-          <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle recipe" type="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              Add to day
-            </button>
-            <ul class="dropdown-menu">
-              {% for date in dates %}
-              <li><a class="dropdown-item recipe" href="#"
-                  hx-post="{% url 'planner:add_meal_to_day' date=date.isoformat meal_pk=meal.pk %}">
-                  {{ date.isoformat }}</a>
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</form>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>
+        Name
+      </th>
+      <th>Categories</th>
+      <th>Rating</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for meal in meals %}
+    <tr>
+      <td>
+        <a class="text-primary" href="#" data-bs-toggle="modal" data-bs-target="#mealModal"
+          hx-get="{% url 'planner:showmeal' pk=meal.pk%}" hx-target=".modal-dialog">{{ meal.name }}</a>
+      </td>
+      <td>
+        {% for category in meal.categories.all %}
+        {{ category.name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </td>
+      <td>{{ meal.rating }}</td>
+      <td>
+        <div class="dropdown">
+          <button class="btn btn-secondary recipe" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+            aria-expanded="false">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <div class="dropend">
+                <a class="dropdown-item add-to-day" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                  Add to day...
+                </a>
+                <ul class="dropdown-menu">
+                  {% for date in dates %}
+                  <li><a class="dropdown-item add-meal" href="#"
+                      hx-post="{% url 'planner:add_meal_to_day' date=date.isoformat meal_pk=meal.pk %}">
+                      {{ date.isoformat }}</a>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a class="dropdown-item text-danger delete" href="{% url 'planner:delete_meal' pk=meal.pk %}"
+                onclick="return confirm('Are you sure you want to delete the recipe?');">
+                Delete
+              </a>
+            </li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}

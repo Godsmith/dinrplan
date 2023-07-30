@@ -14,7 +14,7 @@ urlpatterns = [
     ),
     path("meal/edit/<slug:pk>", views.MealUpdateView.as_view(), name="editmeal"),
     path("meal/show/<slug:pk>", views.MealDetailView.as_view(), name="showmeal"),
-    path("meal/delete", views.MealDeleteView.as_view(), name="delete_meal"),
+    path("meal/delete/<slug:pk>", views.MealDeleteView.as_view(), name="delete_meal"),
     path(
         "meal/comment/<slug:pk>",
         views.CommentCreateView.as_view(),
