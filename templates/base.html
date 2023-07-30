@@ -52,6 +52,7 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              {% if user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'planner:index' %}">Home</a>
               </li>
@@ -64,11 +65,7 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  {% if user.is_authenticated %}
                   {{ user.username }}
-                  {% else %}
-                  Guest
-                  {% endif %}
                 </a>
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item theme-toggle" href="#"><i class="bi bi-sun"></i><i
@@ -76,13 +73,14 @@
                   <li>
                     <hr class="dropdown-divider">
                   </li>
-                  {% if user.is_authenticated %}
                   <li><a class="dropdown-item" href="{% url 'logout' %}">Log out</a></li>
-                  {% else %}
-                  <li><a class="dropdown-item" href="{% url 'login' %}">Log in</a></li>
-                  {% endif %}
                 </ul>
               </li>
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Log in</a>
+              </li>
+              {% endif %}
             </ul>
           </div>
         </div>
