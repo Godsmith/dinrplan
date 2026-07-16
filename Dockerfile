@@ -30,4 +30,4 @@ RUN python manage.py collectstatic --noinput
 
 EXPOSE 8080
 
-CMD ["gunicorn", "--bind", ":8080", "--workers", "2", "dinrplan.wsgi"]
+CMD ["gunicorn", "--bind", ":8080", "--workers", "2", "--timeout", "120", "dinrplan.wsgi"]
