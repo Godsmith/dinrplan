@@ -20,7 +20,7 @@
 ## Testing
 - **pytest + pytest-django** — test runner
 - **pytest-playwright** — end-to-end browser tests (Playwright)
-- **coverage / pytest-cov** — code coverage (reported to Codecov)
+- **coverage / pytest-cov** — code coverage
 - Tests reuse the DB by default (`--reuse-db`); pass `--create-db` after schema changes
 
 ## Code Style
