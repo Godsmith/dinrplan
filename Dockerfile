@@ -9,15 +9,15 @@ RUN apt-get update && apt-get install -y \
     python3-setuptools \
     python3-wheel
 
+RUN pip install uv
+
 RUN mkdir -p /app
 WORKDIR /app
 
 COPY . .
 
-# Even though we use hatch locally, we have to use the system python in the Dockerfile
-# for it to work on fly.io for some reason.
-RUN pip install hatch
-RUN hatch dep show requirements > requirements.txt
+RUN uv sync --no-dev
+RUN uv pip compile pyproject.toml -o requirements.txt
 RUN pip install -r requirements.txt
 
 # These environment variables are needed for collectstatic to run, but they are stored

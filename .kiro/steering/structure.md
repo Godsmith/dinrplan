@@ -10,7 +10,7 @@ dinrplan/
 ├── users/             # Custom User model
 ├── templates/         # Global templates (base.html, login, signup)
 ├── manage.py
-├── pyproject.toml     # Dependencies and hatch config
+├── pyproject.toml     # Dependencies and uv config
 ├── pytest.ini         # Test configuration
 ├── Dockerfile
 └── fly.toml           # Fly.io deployment config

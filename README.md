@@ -11,7 +11,7 @@ Meal planner/recipe database built with Python, Django and htmx. Deployed on [di
 
 - Python 3.9+
 - PostgreSQL
-- hatch
+- uv
 
 ## Setting up the development environment
 
@@ -37,55 +37,55 @@ Edit the database user and password.
 ### Install dependencies
 
 ```
-hatch env create
+uv sync
 ```
 
 ### Install pre-commit
 
 ```
-hatch run pre-commit install
+uv run pre-commit install
 ```
 
 ### Migrate database
 
 ```
-hatch run python manage.py migrate
+uv run python manage.py migrate
 ```
 
 ### Collect static files
 
 ```commandline
-hatch run python manage.py collectstatic
+uv run python manage.py collectstatic
 ```
 
 ### Install playwright
 
 ```commandline
-hatch run playwright install
+uv run playwright install
 ```
 
 ### Ensure tests pass
 
 ```commandline
-hatch run pytest
+uv run pytest
 ```
 
 ## Running development server
 
 ```
-hatch run server
+uv run python manage.py runserver
 ```
 
 ## Running tests
 
 ```
-hatch run pytest
+uv run pytest
 ```
 
 After changing database schema, run
 
 ```commandline
-hatch run pytest --create-db
+uv run pytest --create-db
 ```
 
 to force re-creation of the test database.

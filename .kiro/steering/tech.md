@@ -14,7 +14,7 @@
 - **gunicorn** — WSGI server for production
 
 ## Build & Dependency Management
-- **hatch** — project/environment/script manager (replaces pip + virtualenv directly)
+- **uv** — fast Python package and project manager
 - Dependencies defined in `pyproject.toml`
 
 ## Testing
@@ -35,32 +35,32 @@
 
 ```bash
 # Install dependencies
-hatch env create
+uv sync
 
 # Run development server
-hatch run server                          # runs `python manage.py runserver`
+uv run python manage.py runserver
 
 # Run all tests
-hatch run pytest
+uv run pytest
 
 # Force test DB re-creation (after schema changes)
-hatch run pytest --create-db
+uv run pytest --create-db
 
 # Run migrations
-hatch run python manage.py migrate
+uv run python manage.py migrate
 
 # Create new migrations
-hatch run python manage.py makemigrations
+uv run python manage.py makemigrations
 
 # Collect static files
-hatch run python manage.py collectstatic
+uv run python manage.py collectstatic
 
 # Run with coverage
-hatch run coverage run --source="." -m pytest
-hatch run coverage xml
+uv run coverage run --source="." -m pytest
+uv run coverage xml
 
 # Install pre-commit hooks
-hatch run pre-commit install
+uv run pre-commit install
 ```
 
 ## Environment Variables
