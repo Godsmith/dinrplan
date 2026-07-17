@@ -1,13 +1,6 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
--   repo: local
-    hooks:
-        -   id: black
-            name: black
-            entry: uv run black
-            language: system
-            types: [python]
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.3.0
     hooks:
@@ -15,11 +8,8 @@ repos:
     -   id: end-of-file-fixer
     -   id: check-yaml
     -   id: check-added-large-files
--   repo: https://github.com/asottile/reorder_python_imports
-    rev: v3.8.2
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.22
     hooks:
-    -   id: reorder-python-imports
--   repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.40
-    hooks:
-      - id: lint
+      - id: ruff
+      - id: ruff-format

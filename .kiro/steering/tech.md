@@ -24,11 +24,11 @@
 - Tests reuse the DB by default (`--reuse-db`); pass `--create-db` after schema changes
 
 ## Code Style
-- **black** — code formatter (enforced via pre-commit and CI)
-- **pre-commit** — runs black before each commit
+- **ruff** — linter and formatter (enforced via pre-commit and CI)
+- **pre-commit** — runs ruff and other checks before each commit
 
 ## CI/CD
-- GitHub Actions: `test.yml` (pytest + coverage), `black.yml` (format check), `deploy.yml`
+- GitHub Actions: `test.yml` (pytest + coverage), `pre-commit.yml` (linting/formatting), `deploy.yml`
 - Deployment to Fly.io triggered automatically when all checks pass on push
 
 ## Common Commands

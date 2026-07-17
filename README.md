@@ -3,7 +3,7 @@
 Meal planner/recipe database built with Python, Django and htmx. Deployed on [dinrplan.fly.dev](dinrplan.fly.dev).
 
 [![Test](https://github.com/Godsmith/dinrplan/actions/workflows/test.yml/badge.svg)](https://github.com/Godsmith/dinrplan/actions/workflows/test.yml)
-[![Black](https://github.com/Godsmith/dinrplan/actions/workflows/black.yml/badge.svg)](https://github.com/Godsmith/dinrplan/actions/workflows/black.yml)
+[![pre-commit](https://github.com/Godsmith/dinrplan/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/Godsmith/dinrplan/actions/workflows/pre-commit.yml)
 [![Deploy](https://github.com/Godsmith/dinrplan/actions/workflows/deploy.yml/badge.svg)](https://github.com/Godsmith/dinrplan/actions/workflows/deploy.yml)
 [![codecov](https://codecov.io/gh/Godsmith/dinrplan/branch/master/graph/badge.svg?token=DSINFV82XT)](https://codecov.io/gh/Godsmith/dinrplan)
 
