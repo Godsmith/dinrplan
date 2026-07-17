@@ -9,7 +9,7 @@ Meal planner/recipe database built with Python, Django and htmx. Deployed on [di
 
 ## Prerequisites
 
-- Python 3.9+
+- Python 3.13+
 - PostgreSQL
 - uv
 

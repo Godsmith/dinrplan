@@ -1,7 +1,7 @@
 # Tech Stack
 
 ## Language & Runtime
-- Python 3.9+
+- Python 3.13+
 
 ## Framework & Key Libraries
 - **Django 4.2** — web framework, ORM, auth, admin
