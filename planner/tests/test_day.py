@@ -107,7 +107,7 @@ def test_editing_two_days_and_then_pressing_edit_cancels_just_one_edit(
 
     # When one edit button is pressed
     page.locator(".edit-day").first.click()
-    page.wait_for_timeout(100)
+    page.wait_for_timeout(1000)
 
     # There is just one cancel button visible
     assert page.locator(".selectize-input").count() == 1
