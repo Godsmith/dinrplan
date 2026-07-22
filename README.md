@@ -96,3 +96,7 @@ git push
 ```
 
 The project is automatically deployed to dinrplan.fly.dev when the Github Actions pass.
+
+## Deployment
+
+Currently, the database is deployed to neon.com. To switch the database host, just update the `DATABASE_URL` secret.
