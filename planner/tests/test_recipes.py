@@ -1,3 +1,84 @@
+from planner.models import Day
+from planner.models import Meal
+
+
+class TestRecipesSorting:
+    def test_recipes_sorted_by_times_cooked_descending(self, logged_in_client, user):
+        # Arrange
+        rarely = Meal.objects.create(name="Rarely cooked", author=user, is_recipe=True)
+        often = Meal.objects.create(name="Often cooked", author=user, is_recipe=True)
+
+        day1, _ = Day.objects.get_or_create(date="2026-01-01", user=user)
+        day2, _ = Day.objects.get_or_create(date="2026-01-02", user=user)
+        day3, _ = Day.objects.get_or_create(date="2026-01-03", user=user)
+
+        day1.meals.add(rarely)  # 1 time
+        day1.meals.add(often)
+        day2.meals.add(often)
+        day3.meals.add(often)  # 3 times
+
+        # Act
+        response = logged_in_client.get("/recipes")
+        meals = list(response.context["meals"])
+
+        # Assert
+        assert meals.index(often) < meals.index(rarely)
+
+    def test_recipes_with_equal_times_sorted_by_last_cooked_descending(
+        self, logged_in_client, user
+    ):
+        # Arrange
+        older = Meal.objects.create(name="Older", author=user, is_recipe=True)
+        newer = Meal.objects.create(name="Newer", author=user, is_recipe=True)
+
+        day_old, _ = Day.objects.get_or_create(date="2026-01-01", user=user)
+        day_new, _ = Day.objects.get_or_create(date="2026-06-01", user=user)
+
+        day_old.meals.add(older)
+        day_new.meals.add(newer)
+
+        # Act
+        response = logged_in_client.get("/recipes")
+        meals = list(response.context["meals"])
+
+        # Assert
+        assert meals.index(newer) < meals.index(older)
+
+    def test_never_cooked_recipe_shows_empty_last_cooked(self, logged_in_client, user):
+        # Arrange
+        Meal.objects.create(name="Never cooked", author=user, is_recipe=True)
+
+        # Act
+        response = logged_in_client.get("/recipes")
+        meals = list(response.context["meals"])
+
+        # Assert
+        assert meals[0].last_cooked is None
+        assert meals[0].times_cooked == 0
+
+    def test_times_cooked_only_counts_current_users_days(
+        self, logged_in_client, user, client, db
+    ):
+        # Arrange — another user also cooks the same recipe
+        from users.models import User
+
+        other_user = User.objects.create_user(username="other", password="other")
+        Meal.objects.create(name="Shared name", author=user, is_recipe=True)
+
+        their_recipe = Meal.objects.create(
+            name="Shared name", author=other_user, is_recipe=True
+        )
+        other_day, _ = Day.objects.get_or_create(date="2026-01-01", user=other_user)
+        other_day.meals.add(their_recipe)
+
+        # Act
+        response = logged_in_client.get("/recipes")
+        meals = list(response.context["meals"])
+
+        # Assert — current user's recipe shows 0, not 1
+        assert meals[0].times_cooked == 0
+
+
 def test_modal_is_hidden_by_default(live_server, page, create_recipe_for_today):
     # Arrange
     page.goto(live_server.url + "/recipes")

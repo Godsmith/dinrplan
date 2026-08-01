@@ -2,7 +2,9 @@ import json
 from datetime import date
 from datetime import timedelta
 
+from django.db import models
 from django.db.models import Count
+from django.db.models import Max
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -336,14 +338,19 @@ class UploadJsonView(FormView):
 
 class RecipesView(View):
     def get(self, request, *args, **kwargs):
-        created_meals = [
-            meal
-            for meal in Meal.objects.filter(author=request.user).order_by("name")
-            if meal.is_recipe
-        ]
+        meals = (
+            Meal.objects.filter(author=request.user, is_recipe=True)
+            .annotate(
+                times_cooked=Count(
+                    "day", filter=models.Q(day__user=request.user), distinct=True
+                ),
+                last_cooked=Max("day__date", filter=models.Q(day__user=request.user)),
+            )
+            .order_by("-times_cooked", "-last_cooked", "name")
+        )
         next_two_weeks = [date.today() + timedelta(days=i) for i in range(1, 15)]
         return render(
             request,
             "planner/recipes.html",
-            {"meals": created_meals, "dates": next_two_weeks},
+            {"meals": meals, "dates": next_two_weeks},
         )
