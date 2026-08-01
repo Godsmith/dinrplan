@@ -115,46 +115,48 @@ class TestSortingBrowser:
         page.wait_for_url("**/recipes?sort=-name")
         assert self._row_names(page) == ["Zucchini", "Apple"]
 
-    def test_click_rating_header_sorts_ascending(self, live_server, page, two_recipes):
+    def test_click_rating_header_sorts_descending(self, live_server, page, two_recipes):
         page.goto(f"{live_server.url}/recipes")
-        page.get_by_role("columnheader", name="Rating").get_by_role("link").click()
-        page.wait_for_url("**/recipes?sort=rating")
-        assert self._row_names(page) == ["Apple", "Zucchini"]
-
-    def test_click_rating_header_twice_sorts_descending(
-        self, live_server, page, two_recipes
-    ):
-        page.goto(f"{live_server.url}/recipes")
-        page.get_by_role("columnheader", name="Rating").get_by_role("link").click()
-        page.wait_for_url("**/recipes?sort=rating")
         page.get_by_role("columnheader", name="Rating").get_by_role("link").click()
         page.wait_for_url("**/recipes?sort=-rating")
         assert self._row_names(page) == ["Zucchini", "Apple"]
 
-    def test_click_times_cooked_header_sorts_ascending(
+    def test_click_rating_header_twice_sorts_ascending(
         self, live_server, page, two_recipes
     ):
         page.goto(f"{live_server.url}/recipes")
-        page.get_by_role("columnheader", name="Times cooked").get_by_role(
-            "link"
-        ).click()
-        page.wait_for_url("**/recipes?sort=times_cooked")
-        # Apple cooked 0 times, Zucchini 1 time → Apple first ascending
+        page.get_by_role("columnheader", name="Rating").get_by_role("link").click()
+        page.wait_for_url("**/recipes?sort=-rating")
+        page.get_by_role("columnheader", name="Rating").get_by_role("link").click()
+        page.wait_for_url("**/recipes?sort=rating")
         assert self._row_names(page) == ["Apple", "Zucchini"]
 
-    def test_click_times_cooked_header_twice_sorts_descending(
+    def test_click_times_cooked_header_sorts_descending(
         self, live_server, page, two_recipes
     ):
-        page.goto(f"{live_server.url}/recipes")
-        page.get_by_role("columnheader", name="Times cooked").get_by_role(
-            "link"
-        ).click()
-        page.wait_for_url("**/recipes?sort=times_cooked")
+        # Start from name sort so times_cooked is in its "unselected" state
+        page.goto(f"{live_server.url}/recipes?sort=name")
         page.get_by_role("columnheader", name="Times cooked").get_by_role(
             "link"
         ).click()
         page.wait_for_url("**/recipes?sort=-times_cooked")
+        # Zucchini cooked 1 time, Apple 0 times → Zucchini first descending
         assert self._row_names(page) == ["Zucchini", "Apple"]
+
+    def test_click_times_cooked_header_twice_sorts_ascending(
+        self, live_server, page, two_recipes
+    ):
+        # Start from name sort so times_cooked is in its "unselected" state
+        page.goto(f"{live_server.url}/recipes?sort=name")
+        page.get_by_role("columnheader", name="Times cooked").get_by_role(
+            "link"
+        ).click()
+        page.wait_for_url("**/recipes?sort=-times_cooked")
+        page.get_by_role("columnheader", name="Times cooked").get_by_role(
+            "link"
+        ).click()
+        page.wait_for_url("**/recipes?sort=times_cooked")
+        assert self._row_names(page) == ["Apple", "Zucchini"]
 
     def test_caret_updates_after_clicking_name_header(
         self, live_server, page, two_recipes

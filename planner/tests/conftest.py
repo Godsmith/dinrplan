@@ -33,8 +33,11 @@ def page(context, user):
 
 
 @pytest.fixture
-def user(client, db):
-    return User.objects.create_user(username="user1", password="user1")
+def user(db):
+    user, _ = User.objects.get_or_create(username="user1")
+    user.set_password("user1")
+    user.save()
+    return user
 
 
 @pytest.fixture

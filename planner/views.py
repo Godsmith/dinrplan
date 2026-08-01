@@ -368,11 +368,17 @@ class RecipesView(View):
         )
         next_two_weeks = [date.today() + timedelta(days=i) for i in range(1, 15)]
 
-        # For each sortable column: if currently sorted asc, link goes desc, and vice versa
-        sort_links = {
-            col: f"-{col}" if sort == col else col
-            for col in ("name", "rating", "times_cooked", "last_cooked")
-        }
+        # For each sortable column: if currently sorted asc, link goes desc, and vice versa.
+        # Columns with a preferred default direction start descending on first click.
+        sort_links = {}
+        for col in ("name", "rating", "times_cooked", "last_cooked"):
+            if sort == col:
+                sort_links[col] = f"-{col}"
+            elif sort == f"-{col}":
+                sort_links[col] = col
+            else:
+                # First click: name sorts asc, the rest sort desc by default
+                sort_links[col] = col if col == "name" else f"-{col}"
 
         template = (
             "planner/recipes_table.html"

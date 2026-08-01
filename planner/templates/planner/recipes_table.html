@@ -18,9 +18,9 @@
                     hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.rating }}" hx-target="#recipes-table"
                     hx-swap="outerHTML" hx-push-url="true">
                     Rating
-                    {% if sort == "rating" %}<i class="bi bi-caret-down-fill"></i>
-                    {% elif sort == "-rating" %}<i class="bi bi-caret-up-fill"></i>
-                    {% else %}<i class="bi bi-caret-up opacity-25"></i>{% endif %}
+                    {% if sort == "rating" %}<i class="bi bi-caret-up-fill"></i>
+                    {% elif sort == "-rating" %}<i class="bi bi-caret-down-fill"></i>
+                    {% else %}<i class="bi bi-caret-down opacity-25"></i>{% endif %}
                 </a>
             </th>
             <th>
@@ -29,9 +29,9 @@
                     hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.times_cooked }}" hx-target="#recipes-table"
                     hx-swap="outerHTML" hx-push-url="true">
                     Times cooked
-                    {% if sort == "times_cooked" %}<i class="bi bi-caret-down-fill"></i>
-                    {% elif sort == "-times_cooked" %}<i class="bi bi-caret-up-fill"></i>
-                    {% else %}<i class="bi bi-caret-up opacity-25"></i>{% endif %}
+                    {% if sort == "times_cooked" %}<i class="bi bi-caret-up-fill"></i>
+                    {% elif sort == "-times_cooked" %}<i class="bi bi-caret-down-fill"></i>
+                    {% else %}<i class="bi bi-caret-down opacity-25"></i>{% endif %}
                 </a>
             </th>
             <th>
@@ -40,9 +40,9 @@
                     hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.last_cooked }}" hx-target="#recipes-table"
                     hx-swap="outerHTML" hx-push-url="true">
                     Last cooked
-                    {% if sort == "last_cooked" %}<i class="bi bi-caret-down-fill"></i>
-                    {% elif sort == "-last_cooked" %}<i class="bi bi-caret-up-fill"></i>
-                    {% else %}<i class="bi bi-caret-up opacity-25"></i>{% endif %}
+                    {% if sort == "last_cooked" %}<i class="bi bi-caret-up-fill"></i>
+                    {% elif sort == "-last_cooked" %}<i class="bi bi-caret-down-fill"></i>
+                    {% else %}<i class="bi bi-caret-down opacity-25"></i>{% endif %}
                 </a>
             </th>
             <th></th>
