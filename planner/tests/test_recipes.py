@@ -1,3 +1,5 @@
+import pytest
+
 from planner.models import Day
 from planner.models import Meal
 
@@ -77,6 +79,103 @@ class TestRecipesSorting:
 
         # Assert — current user's recipe shows 0, not 1
         assert meals[0].times_cooked == 0
+
+
+class TestSortingBrowser:
+    """Playwright tests — verify sorting works end-to-end in a real browser."""
+
+    @pytest.fixture
+    def two_recipes(self, user):
+        """Apple (rating=1, never cooked) and Zucchini (rating=5, cooked once)."""
+        apple = Meal.objects.create(name="Apple", author=user, is_recipe=True, rating=1)
+        zucchini = Meal.objects.create(
+            name="Zucchini", author=user, is_recipe=True, rating=5
+        )
+        day, _ = Day.objects.get_or_create(date="2026-01-01", user=user)
+        day.meals.add(zucchini)
+        return apple, zucchini
+
+    def _row_names(self, page):
+        """Return recipe names in DOM order from the table."""
+        return page.locator("tbody tr td:first-child a").all_inner_texts()
+
+    def test_click_name_header_sorts_ascending(self, live_server, page, two_recipes):
+        page.goto(f"{live_server.url}/recipes")
+        page.get_by_role("columnheader", name="Name").get_by_role("link").click()
+        page.wait_for_url("**/recipes?sort=name")
+        assert self._row_names(page) == ["Apple", "Zucchini"]
+
+    def test_click_name_header_twice_sorts_descending(
+        self, live_server, page, two_recipes
+    ):
+        page.goto(f"{live_server.url}/recipes")
+        page.get_by_role("columnheader", name="Name").get_by_role("link").click()
+        page.wait_for_url("**/recipes?sort=name")
+        page.get_by_role("columnheader", name="Name").get_by_role("link").click()
+        page.wait_for_url("**/recipes?sort=-name")
+        assert self._row_names(page) == ["Zucchini", "Apple"]
+
+    def test_click_rating_header_sorts_ascending(self, live_server, page, two_recipes):
+        page.goto(f"{live_server.url}/recipes")
+        page.get_by_role("columnheader", name="Rating").get_by_role("link").click()
+        page.wait_for_url("**/recipes?sort=rating")
+        assert self._row_names(page) == ["Apple", "Zucchini"]
+
+    def test_click_rating_header_twice_sorts_descending(
+        self, live_server, page, two_recipes
+    ):
+        page.goto(f"{live_server.url}/recipes")
+        page.get_by_role("columnheader", name="Rating").get_by_role("link").click()
+        page.wait_for_url("**/recipes?sort=rating")
+        page.get_by_role("columnheader", name="Rating").get_by_role("link").click()
+        page.wait_for_url("**/recipes?sort=-rating")
+        assert self._row_names(page) == ["Zucchini", "Apple"]
+
+    def test_click_times_cooked_header_sorts_ascending(
+        self, live_server, page, two_recipes
+    ):
+        page.goto(f"{live_server.url}/recipes")
+        page.get_by_role("columnheader", name="Times cooked").get_by_role(
+            "link"
+        ).click()
+        page.wait_for_url("**/recipes?sort=times_cooked")
+        # Apple cooked 0 times, Zucchini 1 time → Apple first ascending
+        assert self._row_names(page) == ["Apple", "Zucchini"]
+
+    def test_click_times_cooked_header_twice_sorts_descending(
+        self, live_server, page, two_recipes
+    ):
+        page.goto(f"{live_server.url}/recipes")
+        page.get_by_role("columnheader", name="Times cooked").get_by_role(
+            "link"
+        ).click()
+        page.wait_for_url("**/recipes?sort=times_cooked")
+        page.get_by_role("columnheader", name="Times cooked").get_by_role(
+            "link"
+        ).click()
+        page.wait_for_url("**/recipes?sort=-times_cooked")
+        assert self._row_names(page) == ["Zucchini", "Apple"]
+
+    def test_caret_updates_after_clicking_name_header(
+        self, live_server, page, two_recipes
+    ):
+        page.goto(f"{live_server.url}/recipes")
+        name_header = page.get_by_role("columnheader", name="Name")
+        name_header.get_by_role("link").click()
+        page.wait_for_url("**/recipes?sort=name")
+        # After sorting asc, caret-down-fill should be visible in the Name header
+        assert name_header.locator(".bi-caret-down-fill").is_visible()
+
+    def test_caret_updates_to_up_after_clicking_name_header_twice(
+        self, live_server, page, two_recipes
+    ):
+        page.goto(f"{live_server.url}/recipes")
+        name_header = page.get_by_role("columnheader", name="Name")
+        name_header.get_by_role("link").click()
+        page.wait_for_url("**/recipes?sort=name")
+        name_header.get_by_role("link").click()
+        page.wait_for_url("**/recipes?sort=-name")
+        assert name_header.locator(".bi-caret-up-fill").is_visible()
 
 
 def test_modal_is_hidden_by_default(live_server, page, create_recipe_for_today):

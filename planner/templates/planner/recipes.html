@@ -1,71 +1,7 @@
 {% extends 'base.html' %}
 
-
-{% block head %}
-{% endblock %}
+{% block head %}{% endblock %}
 
 {% block content %}
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Categories</th>
-      <th>Rating</th>
-      <th>Times cooked</th>
-      <th>Last cooked</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for meal in meals %}
-    <tr>
-      <td>
-        <a class="text-primary" href="#" data-bs-toggle="modal" data-bs-target="#mealModal"
-          hx-get="{% url 'planner:showmeal' pk=meal.pk%}" hx-target=".modal-dialog">{{ meal.name }}</a>
-      </td>
-      <td>
-        {% for category in meal.categories.all %}
-        {{ category.name }}{% if not forloop.last %}, {% endif %}
-        {% endfor %}
-      </td>
-      <td>{{ meal.rating }}</td>
-      <td>{{ meal.times_cooked }}</td>
-      <td>{{ meal.last_cooked|default:"—" }}</td>
-      <td>
-        <button class="btn btn-secondary recipe" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
-          aria-expanded="false">
-          <i class="bi bi-three-dots"></i>
-        </button>
-        <ul class="dropdown-menu">
-          <li>
-            <div class="dropend">
-              <a class="dropdown-item add-to-day" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                Add to day...
-              </a>
-              <ul class="dropdown-menu">
-                {% for date in dates %}
-                <li><a class="dropdown-item add-meal" href="#"
-                    hx-post="{% url 'planner:add_meal_to_day' date=date.isoformat meal_pk=meal.pk %}">
-                    {{ date.isoformat }}</a>
-                </li>
-                {% endfor %}
-              </ul>
-            </div>
-          </li>
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-          <li>
-            <a class="dropdown-item text-danger delete" href="{% url 'planner:delete_meal' pk=meal.pk %}"
-              onclick="return confirm('Are you sure you want to delete the recipe?');">
-              Delete
-            </a>
-          </li>
-        </ul>
-        </div>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+{% include "planner/recipes_table.html" %}
 {% endblock %}

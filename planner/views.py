@@ -336,8 +336,26 @@ class UploadJsonView(FormView):
                     day.meals.add(meal)
 
 
+RECIPES_SORT_OPTIONS = {
+    "name": ("name",),
+    "-name": ("-name",),
+    "rating": ("rating", "name"),
+    "-rating": ("-rating", "name"),
+    "times_cooked": ("times_cooked", "-last_cooked", "name"),
+    "-times_cooked": ("-times_cooked", "-last_cooked", "name"),
+    "last_cooked": ("last_cooked", "-times_cooked", "name"),
+    "-last_cooked": ("-last_cooked", "-times_cooked", "name"),
+}
+RECIPES_DEFAULT_SORT = "-times_cooked"
+
+
 class RecipesView(View):
     def get(self, request, *args, **kwargs):
+        sort = request.GET.get("sort", RECIPES_DEFAULT_SORT)
+        if sort not in RECIPES_SORT_OPTIONS:
+            sort = RECIPES_DEFAULT_SORT
+        order = RECIPES_SORT_OPTIONS[sort]
+
         meals = (
             Meal.objects.filter(author=request.user, is_recipe=True)
             .annotate(
@@ -346,11 +364,28 @@ class RecipesView(View):
                 ),
                 last_cooked=Max("day__date", filter=models.Q(day__user=request.user)),
             )
-            .order_by("-times_cooked", "-last_cooked", "name")
+            .order_by(*order)
         )
         next_two_weeks = [date.today() + timedelta(days=i) for i in range(1, 15)]
+
+        # For each sortable column: if currently sorted asc, link goes desc, and vice versa
+        sort_links = {
+            col: f"-{col}" if sort == col else col
+            for col in ("name", "rating", "times_cooked", "last_cooked")
+        }
+
+        template = (
+            "planner/recipes_table.html"
+            if request.headers.get("HX-Request")
+            else "planner/recipes.html"
+        )
         return render(
             request,
-            "planner/recipes.html",
-            {"meals": meals, "dates": next_two_weeks},
+            template,
+            {
+                "meals": meals,
+                "dates": next_two_weeks,
+                "sort": sort,
+                "sort_links": sort_links,
+            },
         )
