@@ -46,7 +46,10 @@ def test_clicking_day_with_meal_does_not_show_input_for_editing_day(
     page.goto(live_server.url)
 
     # Act
-    page.click(f"div.day-{today}")
+    # When a day has meals, the clickable overlay div is not rendered — only meal links
+    # are shown. Click the td cell itself to verify clicking the area does not open
+    # the edit form.
+    page.click(f"td.day-{today}")
     page.wait_for_load_state("networkidle")
 
     # Assert
