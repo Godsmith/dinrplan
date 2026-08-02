@@ -20,6 +20,7 @@ from django.views.generic import DetailView
 from django.views.generic import FormView
 from django.views.generic import UpdateView
 
+from .forms import MealForm
 from .forms import UploadFileForm
 from .models import Category
 from .models import Comment
@@ -98,17 +99,8 @@ class WeeksView(View):
 
 class MealUpdateView(UpdateView):
     model = Meal
+    form_class = MealForm
     template_name = "planner/modals/edit_meal.html"
-    fields = [
-        "name",
-        "source",
-        "persons",
-        "time",
-        "ingredients",
-        "steps",
-        "categories",
-        "rating",
-    ]
     success_url = "not used since we override form_valid, "
     "but if we don't have this Django throws an exception"
 

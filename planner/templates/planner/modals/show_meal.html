@@ -1,3 +1,4 @@
+{% load rating_tags %}
 <div class="modal-content">
   <div class="modal-header">
     <h5 class="modal-title" id="mealModalLabel">{{ object.name }}</h5>
@@ -32,7 +33,7 @@
         </tr>
         <tr>
           <th scope="row">Rating</th>
-          <td>{{ object.rating }}</td>
+          <td>{% star_display object.rating %}</td>
         </tr>
         <tr>
           <th scope="row">
