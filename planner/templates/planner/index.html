@@ -4,6 +4,7 @@
 
 {% block content %}
 <div class="container-fluid">
+  {% if user.is_authenticated %}
   <form class="d-flex" hx-post="{% url 'planner:update_weeks' %}" hx-target="#weeks" hx-swap="outerHTML"
     hx-trigger="change">
     {% csrf_token %}
@@ -28,6 +29,7 @@
       {% endfor %}
     </select>
   </form>
+  {% endif %}
   {% include 'planner/weeks.html' %}
 </div>
 {% endblock %}
