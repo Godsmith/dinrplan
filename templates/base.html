@@ -59,9 +59,6 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'planner:recipes' %}">Recipes</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'planner:upload' %}">Upload</a>
-              </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                   aria-expanded="false">
@@ -70,6 +67,10 @@
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item theme-toggle" href="#"><i class="bi bi-sun"></i><i
                         class="bi bi-moon"></i>&nbsp;Toggle dark mode</a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" href="{% url 'planner:upload' %}">Upload data...</a></li>
                   <li>
                     <hr class="dropdown-divider">
                   </li>
