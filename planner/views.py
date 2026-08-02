@@ -2,6 +2,7 @@ import json
 from datetime import date
 from datetime import timedelta
 
+from django.core.paginator import Paginator
 from django.db import models
 from django.db.models import Count
 from django.db.models import F
@@ -348,6 +349,7 @@ RECIPES_SORT_OPTIONS = {
     "-last_cooked": (F("last_cooked").desc(nulls_last=True), "-times_cooked", "name"),
 }
 RECIPES_DEFAULT_SORT = "-times_cooked"
+RECIPES_PAGE_SIZE = 25
 
 
 class RecipesView(View):
@@ -357,7 +359,7 @@ class RecipesView(View):
             sort = RECIPES_DEFAULT_SORT
         order = RECIPES_SORT_OPTIONS[sort]
 
-        meals = (
+        meals_qs = (
             Meal.objects.filter(author=request.user, is_recipe=True)
             .annotate(
                 times_cooked=Count(
@@ -367,6 +369,11 @@ class RecipesView(View):
             )
             .order_by(*order)
         )
+
+        paginator = Paginator(meals_qs, RECIPES_PAGE_SIZE)
+        page_number = request.GET.get("page", 1)
+        page_obj = paginator.get_page(page_number)
+
         next_two_weeks = [date.today() + timedelta(days=i) for i in range(1, 15)]
 
         # For each sortable column: if currently sorted asc, link goes desc, and vice versa.
@@ -390,7 +397,8 @@ class RecipesView(View):
             request,
             template,
             {
-                "meals": meals,
+                "meals": page_obj,
+                "page_obj": page_obj,
                 "dates": next_two_weeks,
                 "sort": sort,
                 "sort_links": sort_links,

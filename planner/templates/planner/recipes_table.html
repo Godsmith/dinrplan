@@ -1,105 +1,157 @@
-<table id="recipes-table" class="table table-striped">
-    <thead>
-        <tr>
-            <th>
-                <a class="text-body text-decoration-none" href="{% url 'planner:recipes' %}?sort={{ sort_links.name }}"
-                    hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.name }}" hx-target="#recipes-table"
-                    hx-swap="outerHTML" hx-push-url="true">
-                    Name
-                    {% if sort == "name" %}<i class="bi bi-caret-down-fill"></i>
-                    {% elif sort == "-name" %}<i class="bi bi-caret-up-fill"></i>
-                    {% else %}<i class="bi bi-caret-up opacity-25"></i>{% endif %}
-                </a>
-            </th>
-            <th>Categories</th>
-            <th>
-                <a class="text-body text-decoration-none"
-                    href="{% url 'planner:recipes' %}?sort={{ sort_links.rating }}"
-                    hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.rating }}" hx-target="#recipes-table"
-                    hx-swap="outerHTML" hx-push-url="true">
-                    Rating
-                    {% if sort == "rating" %}<i class="bi bi-caret-up-fill"></i>
-                    {% elif sort == "-rating" %}<i class="bi bi-caret-down-fill"></i>
-                    {% else %}<i class="bi bi-caret-down opacity-25"></i>{% endif %}
-                </a>
-            </th>
-            <th>
-                <a class="text-body text-decoration-none"
-                    href="{% url 'planner:recipes' %}?sort={{ sort_links.times_cooked }}"
-                    hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.times_cooked }}" hx-target="#recipes-table"
-                    hx-swap="outerHTML" hx-push-url="true">
-                    Times cooked
-                    {% if sort == "times_cooked" %}<i class="bi bi-caret-up-fill"></i>
-                    {% elif sort == "-times_cooked" %}<i class="bi bi-caret-down-fill"></i>
-                    {% else %}<i class="bi bi-caret-down opacity-25"></i>{% endif %}
-                </a>
-            </th>
-            <th>
-                <a class="text-body text-decoration-none"
-                    href="{% url 'planner:recipes' %}?sort={{ sort_links.last_cooked }}"
-                    hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.last_cooked }}" hx-target="#recipes-table"
-                    hx-swap="outerHTML" hx-push-url="true">
-                    Last cooked
-                    {% if sort == "last_cooked" %}<i class="bi bi-caret-up-fill"></i>
-                    {% elif sort == "-last_cooked" %}<i class="bi bi-caret-down-fill"></i>
-                    {% else %}<i class="bi bi-caret-down opacity-25"></i>{% endif %}
-                </a>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for meal in meals %}
-        <tr>
-            <td>
-                <a class="text-primary" href="#" data-bs-toggle="modal" data-bs-target="#mealModal"
-                    hx-get="{% url 'planner:showmeal' pk=meal.pk %}" hx-target=".modal-dialog">{{ meal.name }}</a>
-            </td>
-            <td>
-                {% for category in meal.categories.all %}
-                {{ category.name }}{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-            </td>
-            <td>{{ meal.rating }}</td>
-            <td>{{ meal.times_cooked }}</td>
-            <td>{{ meal.last_cooked|default:"—" }}</td>
-            <td>
-                <div class="dropdown">
-                    <button class="btn btn-secondary recipe" type="button" data-bs-toggle="dropdown"
-                        data-bs-auto-close="outside" aria-expanded="false">
-                        <i class="bi bi-three-dots"></i>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <div class="dropend">
-                                <a class="dropdown-item add-to-day" href="#" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    Add to day...
+<div id="recipes-table">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    <a class="text-body text-decoration-none"
+                        href="{% url 'planner:recipes' %}?sort={{ sort_links.name }}"
+                        hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.name }}" hx-target="#recipes-table"
+                        hx-swap="outerHTML" hx-push-url="true">
+                        Name
+                        {% if sort == "name" %}<i class="bi bi-caret-down-fill"></i>
+                        {% elif sort == "-name" %}<i class="bi bi-caret-up-fill"></i>
+                        {% else %}<i class="bi bi-caret-up opacity-25"></i>{% endif %}
+                    </a>
+                </th>
+                <th>Categories</th>
+                <th>
+                    <a class="text-body text-decoration-none"
+                        href="{% url 'planner:recipes' %}?sort={{ sort_links.rating }}"
+                        hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.rating }}" hx-target="#recipes-table"
+                        hx-swap="outerHTML" hx-push-url="true">
+                        Rating
+                        {% if sort == "rating" %}<i class="bi bi-caret-up-fill"></i>
+                        {% elif sort == "-rating" %}<i class="bi bi-caret-down-fill"></i>
+                        {% else %}<i class="bi bi-caret-down opacity-25"></i>{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a class="text-body text-decoration-none"
+                        href="{% url 'planner:recipes' %}?sort={{ sort_links.times_cooked }}"
+                        hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.times_cooked }}"
+                        hx-target="#recipes-table" hx-swap="outerHTML" hx-push-url="true">
+                        Times cooked
+                        {% if sort == "times_cooked" %}<i class="bi bi-caret-up-fill"></i>
+                        {% elif sort == "-times_cooked" %}<i class="bi bi-caret-down-fill"></i>
+                        {% else %}<i class="bi bi-caret-down opacity-25"></i>{% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a class="text-body text-decoration-none"
+                        href="{% url 'planner:recipes' %}?sort={{ sort_links.last_cooked }}"
+                        hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.last_cooked }}"
+                        hx-target="#recipes-table" hx-swap="outerHTML" hx-push-url="true">
+                        Last cooked
+                        {% if sort == "last_cooked" %}<i class="bi bi-caret-up-fill"></i>
+                        {% elif sort == "-last_cooked" %}<i class="bi bi-caret-down-fill"></i>
+                        {% else %}<i class="bi bi-caret-down opacity-25"></i>{% endif %}
+                    </a>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for meal in meals %}
+            <tr>
+                <td>
+                    <a class="text-primary" href="#" data-bs-toggle="modal" data-bs-target="#mealModal"
+                        hx-get="{% url 'planner:showmeal' pk=meal.pk %}" hx-target=".modal-dialog">{{ meal.name }}</a>
+                </td>
+                <td>
+                    {% for category in meal.categories.all %}
+                    {{ category.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+                <td>{{ meal.rating }}</td>
+                <td>{{ meal.times_cooked }}</td>
+                <td>{{ meal.last_cooked|default:"—" }}</td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary recipe" type="button" data-bs-toggle="dropdown"
+                            data-bs-auto-close="outside" aria-expanded="false">
+                            <i class="bi bi-three-dots"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <div class="dropend">
+                                    <a class="dropdown-item add-to-day" href="#" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        Add to day...
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        {% for date in dates %}
+                                        <li><a class="dropdown-item add-meal" href="#"
+                                                hx-post="{% url 'planner:add_meal_to_day' date=date.isoformat meal_pk=meal.pk %}">
+                                                {{ date.isoformat }}</a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger delete"
+                                    href="{% url 'planner:delete_meal' pk=meal.pk %}"
+                                    onclick="return confirm('Are you sure you want to delete the recipe?');">
+                                    Delete
                                 </a>
-                                <ul class="dropdown-menu">
-                                    {% for date in dates %}
-                                    <li><a class="dropdown-item add-meal" href="#"
-                                            hx-post="{% url 'planner:add_meal_to_day' date=date.isoformat meal_pk=meal.pk %}">
-                                            {{ date.isoformat }}</a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item text-danger delete"
-                                href="{% url 'planner:delete_meal' pk=meal.pk %}"
-                                onclick="return confirm('Are you sure you want to delete the recipe?');">
-                                Delete
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if page_obj.paginator.num_pages > 1 %}
+    <nav aria-label="Recipe pagination">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ page_obj.previous_page_number }}"
+                    hx-get="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ page_obj.previous_page_number }}"
+                    hx-target="#recipes-table" hx-swap="outerHTML" hx-push-url="true" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link" aria-hidden="true">&laquo;</span>
+            </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">{{ num }}</span>
+            </li>
+            {% elif num >= page_obj.number|add:"-3" and num <= page_obj.number|add:"3" %} <li class="page-item">
+                <a class="page-link" href="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ num }}"
+                    hx-get="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ num }}" hx-target="#recipes-table"
+                    hx-swap="outerHTML" hx-push-url="true">{{ num }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link"
+                        href="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ page_obj.next_page_number }}"
+                        hx-get="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ page_obj.next_page_number }}"
+                        hx-target="#recipes-table" hx-swap="outerHTML" hx-push-url="true" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link" aria-hidden="true">&raquo;</span>
+                </li>
+                {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
