@@ -1,6 +1,8 @@
 # dinrplan
 
-Meal planner/recipe database built with Python, Django and htmx. Deployed on [dinrplan.fly.dev](dinrplan.fly.dev).
+Personal meal planner and recipe database built with Python, Django and htmx. Users can view a weekly calendar grid, add and edit meals and recipes, drag and drop meals between days, and upload data via JSON import.
+
+Deployed at [dinrplan.fly.dev](https://dinrplan.fly.dev).
 
 [![Test](https://github.com/Godsmith/dinrplan/actions/workflows/test.yml/badge.svg)](https://github.com/Godsmith/dinrplan/actions/workflows/test.yml)
 [![pre-commit](https://github.com/Godsmith/dinrplan/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/Godsmith/dinrplan/actions/workflows/pre-commit.yml)
@@ -27,11 +29,17 @@ Make sure to remember the password.
 
 ### Create a .env file
 
-```commandline
+```
 cp .env.example .env
 ```
 
-Edit the database user and password.
+Edit `.env` with your database credentials. Required variables:
+
+| Variable | Description |
+|---|---|
+| `SECRET_KEY` | Django secret key |
+| `DATABASE_URL` | PostgreSQL connection string, e.g. `postgres://user:pass@localhost/dinrplan` |
+| `DEBUG` | Boolean, defaults to `False` |
 
 ### Install dependencies
 
@@ -39,7 +47,7 @@ Edit the database user and password.
 uv sync
 ```
 
-### Install pre-commit
+### Install pre-commit hooks
 
 ```
 uv run pre-commit install
@@ -53,23 +61,23 @@ uv run python manage.py migrate
 
 ### Collect static files
 
-```commandline
+```
 uv run python manage.py collectstatic
 ```
 
-### Install playwright
+### Install Playwright browsers
 
-```commandline
+```
 uv run playwright install
 ```
 
 ### Ensure tests pass
 
-```commandline
+```
 uv run pytest
 ```
 
-## Running development server
+## Running the development server
 
 ```
 uv run python manage.py runserver
@@ -81,22 +89,25 @@ uv run python manage.py runserver
 uv run pytest
 ```
 
-After changing database schema, run
+After changing the database schema, force re-creation of the test database:
 
-```commandline
+```
 uv run pytest --create-db
 ```
 
-to force re-creation of the test database.
+### Running with coverage
+
+```
+uv run coverage run --source="." -m pytest
+uv run coverage xml
+```
 
 ## Deploying
 
-```commandline
+```
 git push
 ```
 
-The project is automatically deployed to dinrplan.fly.dev when the Github Actions pass.
-
-## Deployment
+Deployment to Fly.io is triggered automatically when all GitHub Actions checks pass on push.
 
 Currently, the database is deployed to neon.com. To switch the database host, just update the `DATABASE_URL` secret.
