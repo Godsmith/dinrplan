@@ -59,12 +59,21 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'planner:recipes' %}">Recipes</a>
               </li>
+              {% endif %}
+            </ul>
+            <ul class="navbar-nav ms-lg-auto mb-2 mb-lg-0 align-items-lg-center">
+              <li class="nav-item">
+                <a class="nav-link" href="https://github.com/godsmith/dinrplan" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                  <i class="bi bi-github fs-5"></i>
+                </a>
+              </li>
+              {% if user.is_authenticated %}
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                   aria-expanded="false">
                   {{ user.username }}
                 </a>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu dropdown-menu-end">
                   <li><a class="dropdown-item theme-toggle" href="#"><i class="bi bi-sun"></i><i
                         class="bi bi-moon"></i>&nbsp;Toggle dark mode</a></li>
                   <li>
