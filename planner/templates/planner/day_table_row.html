@@ -5,7 +5,7 @@
 <tr>
   {% endif %}
   <td class="text-nowrap" style="width:1%">{{day.weekday_name}}<br>{{ day.date.isoformat }}</td>
-  <td style="height:1px;" class="day-{{ day.date.isoformat }}"
+  <td class="day-{{ day.date.isoformat }}" style="position: relative;"
     hx-post="{% url 'planner:drag' date=day.date.isoformat %}" hx-trigger="dragstart,drop" hx-ext="event-header"
     hx-target="#weeks" draggable="true" ondragover="event.preventDefault()">
     {% include 'planner/modals/show_day.html' with day=day %}
