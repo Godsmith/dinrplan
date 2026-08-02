@@ -81,7 +81,8 @@
                                     <ul class="dropdown-menu">
                                         {% for date in dates %}
                                         <li><a class="dropdown-item add-meal" href="#"
-                                                hx-post="{% url 'planner:add_meal_to_day' date=date.isoformat meal_pk=meal.pk %}">
+                                                hx-post="{% url 'planner:add_meal_to_day' date=date.isoformat meal_pk=meal.pk %}"
+                                                hx-swap="none">
                                                 {{ date.isoformat }}</a>
                                         </li>
                                         {% endfor %}

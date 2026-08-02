@@ -222,7 +222,16 @@ class AddMealToDayView(View):
         iso_date = date.fromisoformat(kwargs["date"])
         day, _ = Day.objects.get_or_create(date=iso_date, user=request.user)
         day.meals.add(meal)
-        return HttpResponse(status=200)
+        response = HttpResponse(status=200)
+        response["HX-Trigger"] = json.dumps(
+            {
+                "showToast": {
+                    "message": f"\u2713 \u201c{meal.name}\u201d added to {iso_date.isoformat()}",
+                    "type": "success",
+                }
+            }
+        )
+        return response
 
 
 class ShowDayView(View):
