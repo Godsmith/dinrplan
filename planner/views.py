@@ -4,6 +4,7 @@ from datetime import timedelta
 
 from django.db import models
 from django.db.models import Count
+from django.db.models import F
 from django.db.models import Max
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -341,10 +342,10 @@ RECIPES_SORT_OPTIONS = {
     "-name": ("-name",),
     "rating": ("rating", "name"),
     "-rating": ("-rating", "name"),
-    "times_cooked": ("times_cooked", "-last_cooked", "name"),
-    "-times_cooked": ("-times_cooked", "-last_cooked", "name"),
-    "last_cooked": ("last_cooked", "-times_cooked", "name"),
-    "-last_cooked": ("-last_cooked", "-times_cooked", "name"),
+    "times_cooked": ("times_cooked", F("last_cooked").desc(nulls_last=True), "name"),
+    "-times_cooked": ("-times_cooked", F("last_cooked").desc(nulls_last=True), "name"),
+    "last_cooked": (F("last_cooked").asc(nulls_first=True), "-times_cooked", "name"),
+    "-last_cooked": (F("last_cooked").desc(nulls_last=True), "-times_cooked", "name"),
 }
 RECIPES_DEFAULT_SORT = "-times_cooked"
 

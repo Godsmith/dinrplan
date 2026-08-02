@@ -54,9 +54,48 @@ class TestRecipesSorting:
         response = logged_in_client.get("/recipes")
         meals = list(response.context["meals"])
 
-        # Assert
-        assert meals[0].last_cooked is None
-        assert meals[0].times_cooked == 0
+        # Assert — never-cooked recipe has null last_cooked and 0 times_cooked,
+        # and appears last (not first) when sorted by times_cooked descending.
+        never_cooked = next(m for m in meals if m.name == "Never cooked")
+        assert never_cooked.last_cooked is None
+        assert never_cooked.times_cooked == 0
+        assert meals[-1] == never_cooked
+
+    def test_never_cooked_recipe_is_first_when_sorting_last_cooked_ascending(
+        self, logged_in_client, user
+    ):
+        # Arrange
+        never_cooked = Meal.objects.create(
+            name="Never cooked", author=user, is_recipe=True
+        )
+        cooked = Meal.objects.create(name="Cooked", author=user, is_recipe=True)
+        day, _ = Day.objects.get_or_create(date="2026-01-01", user=user)
+        day.meals.add(cooked)
+
+        # Act
+        response = logged_in_client.get("/recipes?sort=last_cooked")
+        meals = list(response.context["meals"])
+
+        # Assert — never-cooked (null last_cooked) floats to the top ascending
+        assert meals[0] == never_cooked
+
+    def test_never_cooked_recipe_is_last_when_sorting_last_cooked_descending(
+        self, logged_in_client, user
+    ):
+        # Arrange
+        never_cooked = Meal.objects.create(
+            name="Never cooked", author=user, is_recipe=True
+        )
+        cooked = Meal.objects.create(name="Cooked", author=user, is_recipe=True)
+        day, _ = Day.objects.get_or_create(date="2026-01-01", user=user)
+        day.meals.add(cooked)
+
+        # Act
+        response = logged_in_client.get("/recipes?sort=-last_cooked")
+        meals = list(response.context["meals"])
+
+        # Assert — never-cooked (null last_cooked) sinks to the bottom descending
+        assert meals[-1] == never_cooked
 
     def test_times_cooked_only_counts_current_users_days(
         self, logged_in_client, user, client, db
@@ -78,7 +117,8 @@ class TestRecipesSorting:
         meals = list(response.context["meals"])
 
         # Assert — current user's recipe shows 0, not 1
-        assert meals[0].times_cooked == 0
+        my_recipe = next(m for m in meals if m.author == user)
+        assert my_recipe.times_cooked == 0
 
 
 class TestSortingBrowser:
