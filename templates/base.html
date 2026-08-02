@@ -40,7 +40,7 @@
   </div>
   <div class="container-fluid">
     <header>
-      <nav class="navbar navbar-expand-lg navbar-light">
+      <nav class="navbar navbar-expand-md navbar-light">
         <div class="container-fluid">
           <a class="navbar-brand" href="{% url 'planner:index' %}">
             <h1>dinrplan</h1>
@@ -51,7 +51,7 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
               {% if user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'planner:index' %}">Home</a>
@@ -61,7 +61,7 @@
               </li>
               {% endif %}
             </ul>
-            <ul class="navbar-nav ms-lg-auto mb-2 mb-lg-0 align-items-lg-center">
+            <ul class="navbar-nav ms-md-auto mb-2 mb-md-0 align-items-md-center">
               <li class="nav-item">
                 <a class="nav-link" href="https://github.com/godsmith/dinrplan" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                   <i class="bi bi-github fs-5"></i>
