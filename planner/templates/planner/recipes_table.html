@@ -1,11 +1,31 @@
 <div id="recipes-table">
+    {% if categories %}
+    <div class="mb-3 d-flex flex-wrap gap-2 align-items-center">
+        <span class="text-secondary small">Filter:</span>
+        <a class="badge rounded-pill text-decoration-none {% if not category_filter %}text-bg-primary{% else %}text-bg-secondary{% endif %}"
+            href="{% url 'planner:recipes' %}?sort={{ sort }}"
+            hx-get="{% url 'planner:recipes' %}?sort={{ sort }}"
+            hx-target="#recipes-table" hx-swap="outerHTML" hx-push-url="true">
+            All
+        </a>
+        {% for category in categories %}
+        <a class="badge rounded-pill text-decoration-none {% if category_filter == category.name %}text-bg-primary{% else %}text-bg-secondary{% endif %}"
+            href="{% url 'planner:recipes' %}?sort={{ sort }}&category={{ category.name|urlencode }}"
+            hx-get="{% url 'planner:recipes' %}?sort={{ sort }}&category={{ category.name|urlencode }}"
+            hx-target="#recipes-table" hx-swap="outerHTML" hx-push-url="true">
+            {{ category.name }}
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>
                     <a class="text-body text-decoration-none"
-                        href="{% url 'planner:recipes' %}?sort={{ sort_links.name }}"
-                        hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.name }}" hx-target="#recipes-table"
+                        href="{% url 'planner:recipes' %}?sort={{ sort_links.name }}{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}"
+                        hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.name }}{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}" hx-target="#recipes-table"
                         hx-swap="outerHTML" hx-push-url="true">
                         Name
                         {% if sort == "name" %}<i class="bi bi-caret-down-fill"></i>
@@ -16,8 +36,8 @@
                 <th>Categories</th>
                 <th>
                     <a class="text-body text-decoration-none"
-                        href="{% url 'planner:recipes' %}?sort={{ sort_links.rating }}"
-                        hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.rating }}" hx-target="#recipes-table"
+                        href="{% url 'planner:recipes' %}?sort={{ sort_links.rating }}{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}"
+                        hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.rating }}{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}" hx-target="#recipes-table"
                         hx-swap="outerHTML" hx-push-url="true">
                         Rating
                         {% if sort == "rating" %}<i class="bi bi-caret-up-fill"></i>
@@ -27,8 +47,8 @@
                 </th>
                 <th>
                     <a class="text-body text-decoration-none"
-                        href="{% url 'planner:recipes' %}?sort={{ sort_links.times_cooked }}"
-                        hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.times_cooked }}"
+                        href="{% url 'planner:recipes' %}?sort={{ sort_links.times_cooked }}{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}"
+                        hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.times_cooked }}{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}"
                         hx-target="#recipes-table" hx-swap="outerHTML" hx-push-url="true">
                         Times cooked
                         {% if sort == "times_cooked" %}<i class="bi bi-caret-up-fill"></i>
@@ -38,8 +58,8 @@
                 </th>
                 <th>
                     <a class="text-body text-decoration-none"
-                        href="{% url 'planner:recipes' %}?sort={{ sort_links.last_cooked }}"
-                        hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.last_cooked }}"
+                        href="{% url 'planner:recipes' %}?sort={{ sort_links.last_cooked }}{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}"
+                        hx-get="{% url 'planner:recipes' %}?sort={{ sort_links.last_cooked }}{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}"
                         hx-target="#recipes-table" hx-swap="outerHTML" hx-push-url="true">
                         Last cooked
                         {% if sort == "last_cooked" %}<i class="bi bi-caret-up-fill"></i>
@@ -113,8 +133,8 @@
             {% if page_obj.has_previous %}
             <li class="page-item">
                 <a class="page-link"
-                    href="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ page_obj.previous_page_number }}"
-                    hx-get="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ page_obj.previous_page_number }}"
+                    href="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ page_obj.previous_page_number }}{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}"
+                    hx-get="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ page_obj.previous_page_number }}{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}"
                     hx-target="#recipes-table" hx-swap="outerHTML" hx-push-url="true" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -131,8 +151,8 @@
                 <span class="page-link">{{ num }}</span>
             </li>
             {% elif num >= page_obj.number|add:"-3" and num <= page_obj.number|add:"3" %} <li class="page-item">
-                <a class="page-link" href="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ num }}"
-                    hx-get="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ num }}" hx-target="#recipes-table"
+                <a class="page-link" href="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ num }}{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}"
+                    hx-get="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ num }}{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}" hx-target="#recipes-table"
                     hx-swap="outerHTML" hx-push-url="true">{{ num }}</a>
                 </li>
                 {% endif %}
@@ -141,8 +161,8 @@
                 {% if page_obj.has_next %}
                 <li class="page-item">
                     <a class="page-link"
-                        href="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ page_obj.next_page_number }}"
-                        hx-get="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ page_obj.next_page_number }}"
+                        href="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ page_obj.next_page_number }}{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}"
+                        hx-get="{% url 'planner:recipes' %}?sort={{ sort }}&page={{ page_obj.next_page_number }}{% if category_filter %}&category={{ category_filter|urlencode }}{% endif %}"
                         hx-target="#recipes-table" hx-swap="outerHTML" hx-push-url="true" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>

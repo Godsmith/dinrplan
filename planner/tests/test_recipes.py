@@ -1,5 +1,6 @@
 import pytest
 
+from planner.models import Category
 from planner.models import Day
 from planner.models import Meal
 
@@ -317,3 +318,77 @@ class TestAddMeal:
         # Assert
         page.goto(live_server.url)
         assert "Recipe for today" in page.content()
+
+
+class TestCategoryFilter:
+    def test_filter_returns_only_matching_category(self, logged_in_client, user):
+        # Arrange
+        pasta = Category.objects.create(name="Pasta")
+        soup = Category.objects.create(name="Soup")
+
+        bolognese = Meal.objects.create(name="Bolognese", author=user, is_recipe=True)
+        bolognese.categories.add(pasta)
+
+        minestrone = Meal.objects.create(name="Minestrone", author=user, is_recipe=True)
+        minestrone.categories.add(soup)
+
+        # Act
+        response = logged_in_client.get("/recipes?category=Pasta")
+        meals = list(response.context["meals"])
+
+        # Assert
+        assert bolognese in meals
+        assert minestrone not in meals
+
+    def test_no_filter_returns_all_recipes(self, logged_in_client, user):
+        # Arrange
+        pasta = Category.objects.create(name="Pasta")
+        bolognese = Meal.objects.create(name="Bolognese", author=user, is_recipe=True)
+        bolognese.categories.add(pasta)
+        uncategorised = Meal.objects.create(
+            name="Uncategorised", author=user, is_recipe=True
+        )
+
+        # Act
+        response = logged_in_client.get("/recipes")
+        meals = list(response.context["meals"])
+
+        # Assert
+        assert bolognese in meals
+        assert uncategorised in meals
+
+    def test_unknown_category_returns_empty_list(self, logged_in_client, user):
+        # Arrange
+        Meal.objects.create(name="Bolognese", author=user, is_recipe=True)
+
+        # Act
+        response = logged_in_client.get("/recipes?category=DoesNotExist")
+        meals = list(response.context["meals"])
+
+        # Assert
+        assert meals == []
+
+    def test_categories_context_contains_only_users_categories(
+        self, logged_in_client, user, db
+    ):
+        # Arrange — another user's recipe has a different category
+        from users.models import User
+
+        other_user = User.objects.create_user(username="other2", password="other2")
+        their_category = Category.objects.create(name="TheirCategory")
+        their_recipe = Meal.objects.create(
+            name="Their recipe", author=other_user, is_recipe=True
+        )
+        their_recipe.categories.add(their_category)
+
+        my_category = Category.objects.create(name="MyCategory")
+        my_recipe = Meal.objects.create(name="My recipe", author=user, is_recipe=True)
+        my_recipe.categories.add(my_category)
+
+        # Act
+        response = logged_in_client.get("/recipes")
+        category_names = [c.name for c in response.context["categories"]]
+
+        # Assert
+        assert "MyCategory" in category_names
+        assert "TheirCategory" not in category_names

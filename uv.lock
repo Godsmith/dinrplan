@@ -158,45 +158,47 @@ name = "dinrplan"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "coverage" },
     { name = "django" },
     { name = "django-environ" },
     { name = "gunicorn" },
-    { name = "playwright" },
-    { name = "pre-commit" },
     { name = "psycopg2-binary" },
-    { name = "pyreadline3" },
-    { name = "pytest" },
-    { name = "pytest-cov" },
-    { name = "pytest-django" },
-    { name = "pytest-playwright" },
     { name = "whitenoise" },
 ]
 
 [package.dev-dependencies]
 dev = [
     { name = "beautifulsoup4" },
+    { name = "coverage" },
+    { name = "playwright" },
+    { name = "pre-commit" },
+    { name = "pyreadline3" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "pytest-django" },
+    { name = "pytest-playwright" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "coverage", specifier = "==7.15.2" },
     { name = "django", specifier = "==6.0.7" },
     { name = "django-environ", specifier = "==0.14.0" },
     { name = "gunicorn", specifier = "==26.0.0" },
+    { name = "psycopg2-binary", specifier = "==2.9.12" },
+    { name = "whitenoise", specifier = "==6.12.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "beautifulsoup4", specifier = ">=4.15.0" },
+    { name = "coverage", specifier = "==7.15.2" },
     { name = "playwright", specifier = "==1.61.0" },
     { name = "pre-commit", specifier = "==4.6.0" },
-    { name = "psycopg2-binary", specifier = "==2.9.12" },
     { name = "pyreadline3", specifier = "==3.5.6" },
     { name = "pytest", specifier = "==9.1.1" },
     { name = "pytest-cov", specifier = "==7.1.0" },
     { name = "pytest-django", specifier = "==4.12.0" },
     { name = "pytest-playwright", specifier = "==0.8.0" },
-    { name = "whitenoise", specifier = "==6.12.0" },
 ]
-
-[package.metadata.requires-dev]
-dev = [{ name = "beautifulsoup4", specifier = ">=4.15.0" }]
 
 [[package]]
 name = "distlib"

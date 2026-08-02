@@ -368,6 +368,8 @@ class RecipesView(View):
             sort = RECIPES_DEFAULT_SORT
         order = RECIPES_SORT_OPTIONS[sort]
 
+        category_filter = request.GET.get("category", "")
+
         meals_qs = (
             Meal.objects.filter(author=request.user, is_recipe=True)
             .annotate(
@@ -377,6 +379,16 @@ class RecipesView(View):
                 last_cooked=Max("day__date", filter=models.Q(day__user=request.user)),
             )
             .order_by(*order)
+        )
+
+        if category_filter:
+            meals_qs = meals_qs.filter(categories__name=category_filter)
+
+        # All categories that belong to this user's recipes (for the filter bar)
+        categories = (
+            Category.objects.filter(meal__author=request.user, meal__is_recipe=True)
+            .distinct()
+            .order_by("name")
         )
 
         paginator = Paginator(meals_qs, RECIPES_PAGE_SIZE)
@@ -411,5 +423,7 @@ class RecipesView(View):
                 "dates": next_two_weeks,
                 "sort": sort,
                 "sort_links": sort_links,
+                "categories": categories,
+                "category_filter": category_filter,
             },
         )
