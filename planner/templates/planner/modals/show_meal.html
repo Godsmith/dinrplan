@@ -55,7 +55,75 @@
     </table>
   </div>
   <div class="modal-footer">
+    <button id="wake-lock-btn" type="button" class="btn btn-outline-secondary me-auto"
+      title="Keep screen on while reading this recipe" aria-pressed="false">
+      <i class="bi bi-phone"></i> Keep screen on
+    </button>
     <a id="edit-meal" class="btn btn-primary" hx-get="{% url 'planner:editmeal' pk=meal.pk %}" hx-target=".modal-dialog"
       href="#">Edit</a>
   </div>
 </div>
+
+<script>
+(function () {
+  const btn = document.getElementById('wake-lock-btn');
+  if (!btn) return;
+
+  // Hide the button entirely if the API isn't supported
+  if (!('wakeLock' in navigator)) {
+    btn.style.display = 'none';
+    return;
+  }
+
+  let wakeLock = null;
+
+  async function acquireWakeLock() {
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      btn.classList.replace('btn-outline-secondary', 'btn-warning');
+      btn.innerHTML = '<i class="bi bi-phone-fill"></i> Screen on';
+      btn.setAttribute('aria-pressed', 'true');
+
+      // Re-acquire automatically if the page becomes visible again
+      wakeLock.addEventListener('release', () => {
+        if (btn.getAttribute('aria-pressed') === 'true') {
+          // Was released by the browser (e.g. tab switch) — reflect that in UI
+          btn.classList.replace('btn-warning', 'btn-outline-secondary');
+          btn.innerHTML = '<i class="bi bi-phone"></i> Keep screen on';
+          btn.setAttribute('aria-pressed', 'false');
+          wakeLock = null;
+        }
+      });
+    } catch (err) {
+      console.warn('Wake lock request failed:', err);
+    }
+  }
+
+  async function releaseWakeLock() {
+    if (wakeLock) {
+      await wakeLock.release();
+      wakeLock = null;
+    }
+    btn.classList.replace('btn-warning', 'btn-outline-secondary');
+    btn.innerHTML = '<i class="bi bi-phone"></i> Keep screen on';
+    btn.setAttribute('aria-pressed', 'false');
+  }
+
+  btn.addEventListener('click', () => {
+    if (btn.getAttribute('aria-pressed') === 'true') {
+      releaseWakeLock();
+    } else {
+      acquireWakeLock();
+    }
+  });
+
+  // Release when the modal closes
+  const modal = btn.closest('.modal-content');
+  if (modal) {
+    const bsModal = modal.closest('.modal');
+    if (bsModal) {
+      bsModal.addEventListener('hide.bs.modal', releaseWakeLock, { once: true });
+    }
+  }
+})();
+</script>
