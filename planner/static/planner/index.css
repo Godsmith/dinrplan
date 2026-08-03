@@ -63,13 +63,14 @@ html[data-bs-theme="dark"] .table {
 /* ── Star rating widget ──────────────────────────────────────────── */
 
 /*
- * Stars are rendered 5→1 in DOM order, then flex-direction:row-reverse
- * displays them 1→5 left-to-right. The CSS ~ sibling combinator can then
- * select all stars with a lower value when a higher one is :checked.
+ * Stars are rendered in DOM order 0 (clear), 1, 2, 3, 4, 5.
+ * Highlighting uses CSS :has() so that checking/hovering star N also
+ * lights up all stars before it (lower values). :has() is supported in
+ * all modern browsers including Firefox 121+.
  */
 .star-rating {
     display: inline-flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     gap: 0.15rem;
     align-items: center;
 }
@@ -82,26 +83,53 @@ html[data-bs-theme="dark"] .table {
     line-height: 1;
 }
 
-/* Selected star + all lower-value stars (later siblings = lower numbers) */
-.star-rating__input:checked+.star-rating__label {
+/*
+ * DOM structure inside .star-rating (inputs are visually-hidden):
+ *   input#_0  label.clear    ← nth-child 1, 2
+ *   input#_1  label          ← nth-child 3, 4
+ *   input#_2  label          ← nth-child 5, 6
+ *   input#_3  label          ← nth-child 7, 8
+ *   input#_4  label          ← nth-child 9, 10
+ *   input#_5  label          ← nth-child 11, 12
+ *
+ * :has() lets us highlight stars 1..N when star N is checked/hovered.
+ */
+
+/* ── Checked state ── */
+.star-rating:has(input:nth-child(3):checked) label:nth-child(4),
+.star-rating:has(input:nth-child(5):checked) label:nth-child(4),
+.star-rating:has(input:nth-child(5):checked) label:nth-child(6),
+.star-rating:has(input:nth-child(7):checked) label:nth-child(4),
+.star-rating:has(input:nth-child(7):checked) label:nth-child(6),
+.star-rating:has(input:nth-child(7):checked) label:nth-child(8),
+.star-rating:has(input:nth-child(9):checked) label:nth-child(4),
+.star-rating:has(input:nth-child(9):checked) label:nth-child(6),
+.star-rating:has(input:nth-child(9):checked) label:nth-child(8),
+.star-rating:has(input:nth-child(9):checked) label:nth-child(10),
+.star-rating:has(input:nth-child(11):checked) label:nth-child(4),
+.star-rating:has(input:nth-child(11):checked) label:nth-child(6),
+.star-rating:has(input:nth-child(11):checked) label:nth-child(8),
+.star-rating:has(input:nth-child(11):checked) label:nth-child(10),
+.star-rating:has(input:nth-child(11):checked) label:nth-child(12) {
     color: #ffc107;
 }
 
-.star-rating__input:checked~.star-rating__label {
-    color: #ffc107;
-}
-
-/* The clear (✕) button should never turn gold even when 0 is checked */
-.star-rating__input:checked~.star-rating__clear {
-    color: #6c757d;
-}
-
-/* Hover preview */
-.star-rating__label:not(.star-rating__clear):hover {
-    color: #ffc107;
-}
-
-.star-rating__label:not(.star-rating__clear):hover~.star-rating__label:not(.star-rating__clear) {
+/* ── Hover preview ── */
+.star-rating label:nth-child(4):hover,
+.star-rating:has(label:nth-child(6):hover) label:nth-child(4),
+.star-rating label:nth-child(6):hover,
+.star-rating:has(label:nth-child(8):hover) label:nth-child(4),
+.star-rating:has(label:nth-child(8):hover) label:nth-child(6),
+.star-rating label:nth-child(8):hover,
+.star-rating:has(label:nth-child(10):hover) label:nth-child(4),
+.star-rating:has(label:nth-child(10):hover) label:nth-child(6),
+.star-rating:has(label:nth-child(10):hover) label:nth-child(8),
+.star-rating label:nth-child(10):hover,
+.star-rating:has(label:nth-child(12):hover) label:nth-child(4),
+.star-rating:has(label:nth-child(12):hover) label:nth-child(6),
+.star-rating:has(label:nth-child(12):hover) label:nth-child(8),
+.star-rating:has(label:nth-child(12):hover) label:nth-child(10),
+.star-rating label:nth-child(12):hover {
     color: #ffc107;
 }
 

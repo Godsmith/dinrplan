@@ -13,10 +13,19 @@ class StarRatingWidget(forms.RadioSelect):
 
     def render(self, name, value, attrs=None, renderer=None):
         current = int(value) if value not in (None, "", "None") else 0
-        # Stars rendered 5→1 (flex-direction: row-reverse shows them 1→5 visually).
-        # The CSS sibling combinator (~) then lights up all stars with lower values.
+        # Stars rendered 1→5 in DOM order. CSS :has() is used for hover/selected
+        # highlighting so we don't need the flex-reverse trick (which breaks Firefox).
         html = '<div class="star-rating" role="radiogroup" aria-label="Rating">'
-        for i in range(5, 0, -1):
+        # The "0 stars / clear" option comes first in DOM
+        checked_zero = "checked" if current == 0 else ""
+        html += (
+            f'<input type="radio" class="star-rating__input visually-hidden" '
+            f'name="{name}" id="{name}_0" value="0" {checked_zero}>'
+            f'<label class="star-rating__label star-rating__clear" for="{name}_0" title="Clear rating">'
+            f'<i class="bi bi-x-circle" aria-hidden="true"></i>'
+            f"</label>"
+        )
+        for i in range(1, 6):
             checked = "checked" if i == current else ""
             label_title = f"{i} star{'s' if i != 1 else ''}"
             html += (
@@ -26,15 +35,6 @@ class StarRatingWidget(forms.RadioSelect):
                 f'<i class="bi bi-star-fill" aria-hidden="true"></i>'
                 f"</label>"
             )
-        # The "0 stars / clear" option — a small ✕ after the stars
-        checked_zero = "checked" if current == 0 else ""
-        html += (
-            f'<input type="radio" class="star-rating__input visually-hidden" '
-            f'name="{name}" id="{name}_0" value="0" {checked_zero}>'
-            f'<label class="star-rating__label star-rating__clear" for="{name}_0" title="Clear rating">'
-            f'<i class="bi bi-x-circle" aria-hidden="true"></i>'
-            f"</label>"
-        )
         html += "</div>"
         return mark_safe(html)
 
